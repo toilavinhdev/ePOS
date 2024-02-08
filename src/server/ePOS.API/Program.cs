@@ -31,5 +31,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.MigrateDatabase();
+app.UseStaticFileSetup(appSettings);
 
 app.Run();

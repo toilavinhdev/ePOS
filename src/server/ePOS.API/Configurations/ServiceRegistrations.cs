@@ -10,6 +10,8 @@ public static class ServiceRegistrations
     {
         services.AddTransient<ITenantContext, TenantContext>();
         services.AddTransient<IUserService, UserService>();
+        services.AddTransient<IStorageService, StorageService>();
+        services.AddTransient<IMailService, MailService>();
         return services;
     }
 }

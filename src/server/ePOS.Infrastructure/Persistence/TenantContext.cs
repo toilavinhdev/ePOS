@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using ePOS.Application.Common.Contracts;
+using ePOS.Domain.FileAggregate;
 using ePOS.Infrastructure.Identity.Aggregate;
 using ePOS.Shared.ValueObjects;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -14,12 +15,15 @@ public class TenantContext : IdentityDbContext<ApplicationUser, ApplicationRole,
 {
     public TenantContext(DbContextOptions<TenantContext> options) : base(options) { }
 
+    public DbSet<ApplicationFile> Files { get; set; } = default!;
+    
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         ModelCreating<ApplicationUser>(builder);
         ModelCreating<ApplicationRole>(builder);
+        ModelCreating<ApplicationFile>(builder);
     }
     
     private static void ModelCreating<T>(ModelBuilder builder) where T : class, IEntity
