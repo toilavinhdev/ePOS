@@ -12,7 +12,7 @@ public class MigrateUser
     {
         var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
         
-        if (!await context.Users.AnyAsync(x => x.Email.Equals("admin@epos.com")))
+        if (!await context.Users.AnyAsync(x => x.Email.Equals("adminepos@gmail.com")))
         {
             var userBaseEntry = await context.Users.AddAsync(new ApplicationUser()
             {
