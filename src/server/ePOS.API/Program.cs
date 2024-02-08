@@ -12,6 +12,8 @@ var services = builder.Services;
 services.AddSingleton(appSettings);
 services.AddSwaggerSetup();
 services.AddHttpContextAccessor();
+services.AddPersistenceSetup(appSettings);
+services.AddIdentitySetup(appSettings);
 services.AddValidatorsFromAssemblyContaining<IAssemblyMaker>();
 services.AddMediatR(config => config.RegisterServicesFromAssemblyContaining<IAssemblyMaker>());
 services.AddAutoMapper(typeof(IAssemblyMaker));
@@ -25,5 +27,6 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+app.MigrateDatabase();
 
 app.Run();
