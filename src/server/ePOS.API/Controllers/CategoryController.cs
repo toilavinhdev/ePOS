@@ -1,5 +1,6 @@
 ﻿using ePOS.Application.Commands;
 using ePOS.Application.Queries;
+using ePOS.Infrastructure.Identity.Authorization;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,12 +18,14 @@ public class CategoryController : ControllerBase
     }
     
     [HttpPost("create")]
+    [ApplicationPermission]
     public async Task<IActionResult> Create([FromBody] CreateCategoryCommand command)
     {
         return Ok(await _mediator.Send(command));
     }
     
     [HttpPost("list")]
+    [ApplicationPermission]
     public async Task<IActionResult> Create([FromBody] ListCategoryQuery query)
     {
         return Ok(await _mediator.Send(query));

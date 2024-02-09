@@ -1,5 +1,6 @@
 ﻿using ePOS.Application.Commands.User;
 using ePOS.Application.Queries.User;
+using ePOS.Infrastructure.Identity.Authorization;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,6 +18,7 @@ public class UserController : ControllerBase
     }
 
     [HttpGet("me")]
+    [ApplicationPermission]
     public async Task<IActionResult> Me()
     {
         return Ok(await _mediator.Send(new GetMeQuery()));
@@ -35,6 +37,7 @@ public class UserController : ControllerBase
     }
 
     [HttpPut("change-password")]
+    [ApplicationPermission]
     public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordCommand command)
     {
         return Ok(await _mediator.Send(command));
