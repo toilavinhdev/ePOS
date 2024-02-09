@@ -189,6 +189,9 @@ namespace ePOS.Infrastructure.Migrations
                     b.Property<Guid?>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<DateTimeOffset?>("ModifiedAt")
                         .HasColumnType("datetimeoffset");
 

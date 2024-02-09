@@ -15,6 +15,8 @@ public class Item : AuditableEntity, IAggregateRoot
     [ForeignKey(nameof(UnitId))]
     public Unit Unit { get; set; } = default!;
     
+    public bool IsActive { get; set; }
+    
     public double Price { get; set; }
 
     public ItemTax? ItemTax { get; set; }

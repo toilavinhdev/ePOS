@@ -12,8 +12,8 @@ using ePOS.Infrastructure.Persistence;
 namespace ePOS.Infrastructure.Migrations
 {
     [DbContext(typeof(TenantContext))]
-    [Migration("20240209084251_20240208154910_AddTenantLibraryItemEntities")]
-    partial class _20240208154910_AddTenantLibraryItemEntities
+    [Migration("20240209093705_AddTenantLibraryItemEntities")]
+    partial class AddTenantLibraryItemEntities
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -191,6 +191,9 @@ namespace ePOS.Infrastructure.Migrations
 
                     b.Property<Guid?>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<DateTimeOffset?>("ModifiedAt")
                         .HasColumnType("datetimeoffset");

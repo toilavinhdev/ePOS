@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ePOS.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class _20240208154910_AddTenantLibraryItemEntities : Migration
+    public partial class AddTenantLibraryItemEntities : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -396,6 +396,7 @@ namespace ePOS.Infrastructure.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Sku = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     UnitId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
                     Price = table.Column<double>(type: "float", nullable: false),
                     TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     SubId = table.Column<long>(type: "bigint", nullable: false, defaultValueSql: "NEXT VALUE FOR Sequence_Item"),
