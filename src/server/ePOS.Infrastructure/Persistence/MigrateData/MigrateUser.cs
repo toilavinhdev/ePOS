@@ -1,11 +1,10 @@
 ﻿using ePOS.Domain.TenantAggregate;
 using ePOS.Infrastructure.Identity.Aggregate;
-using ePOS.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace ePOS.Infrastructure.MigrateData;
+namespace ePOS.Infrastructure.Persistence.MigrateData;
 
 public class MigrateUser
 {

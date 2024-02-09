@@ -1,7 +1,6 @@
 ﻿using ePOS.Domain.UnitAggregate;
-using ePOS.Infrastructure.Persistence;
 
-namespace ePOS.Infrastructure.MigrateData;
+namespace ePOS.Infrastructure.Persistence.MigrateData;
 
 public class MigrateUnit
 {
