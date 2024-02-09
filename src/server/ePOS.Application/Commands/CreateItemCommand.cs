@@ -2,6 +2,8 @@
 using ePOS.Application.Common.Contracts;
 using ePOS.Application.Common.Mediator;
 using ePOS.Domain.ItemAggregate;
+using ePOS.Domain.OptionAttributeAggregate;
+using ePOS.Domain.ToppingAggregate;
 using ePOS.Domain.UnitAggregate;
 using ePOS.Shared.Exceptions;
 using ePOS.Shared.ValueObjects;
@@ -22,6 +24,10 @@ public class CreateItemCommand : IAPIRequest
 
     public string[]? ImageUrls { get; set; }
     
+    public List<Guid>? ToppingIds { get; set; }
+    
+    public List<Guid>? OptionAttributeIds { get; set; }
+    
     public List<ItemSizePriceRequest>? SizePrices { get; set; }
 }
 
@@ -38,12 +44,10 @@ public class CreateItemCommandValidator : AbstractValidator<CreateItemCommand>
 public class CreateItemCommandHandler : APIRequestHandler<CreateItemCommand>
 {
     private readonly ITenantContext _context;
-    private readonly IMapper _mapper;
     
-    public CreateItemCommandHandler(IUserService userService, ITenantContext context, IMapper mapper) : base(userService)
+    public CreateItemCommandHandler(IUserService userService, ITenantContext context) : base(userService)
     {
         _context = context;
-        _mapper = mapper;
     }
 
     public override async Task<APIResponse> Handle(CreateItemCommand request, CancellationToken cancellationToken)
@@ -83,18 +87,56 @@ public class CreateItemCommandHandler : APIRequestHandler<CreateItemCommand>
 
         if (request.SizePrices is not null)
         {
-            var sizes = request.SizePrices.Select(x => new ItemSize()
+            var sizes = request.SizePrices.Select((x, idx) => new ItemSize()
             {
                 Id = Guid.NewGuid(),
                 ItemId = item.Id,
                 Name = x.Name,
                 Price = x.Price,
+                SortIndex = idx,
                 TenantId = UserClaimsValue.TenantId,
                 CreatedAt = DateTimeOffset.Now,
                 CreatedBy = UserClaimsValue.Id
             });
             await _context.ItemSizes.AddRangeAsync(sizes, cancellationToken);
         }
+
+        if (request.ToppingIds is not null)
+        {
+            foreach (var id in request.ToppingIds)
+            {
+                if (!await _context.Toppings.AnyAsync(x => x.Id.Equals(id), cancellationToken))
+                    throw new RecordNotFoundException(nameof(Topping), id);
+            }
+            var itemToppings = request.ToppingIds.Select((x, idx) => new ItemTopping()
+            {
+                Id = Guid.NewGuid(),
+                TenantId = UserClaimsValue.TenantId,
+                SortIndex = idx,
+                ItemId = item.Id,
+                ToppingId = x
+            });
+            await _context.ItemToppings.AddRangeAsync(itemToppings, cancellationToken);
+        }
+        
+        if (request.OptionAttributeIds is not null)
+        {
+            foreach (var id in request.OptionAttributeIds)
+            {
+                if (!await _context.OptionAttributes.AnyAsync(x => x.Id.Equals(id), cancellationToken))
+                    throw new RecordNotFoundException(nameof(OptionAttribute), id);
+            }
+            var itemOptions = request.OptionAttributeIds.Select((x, idx) => new ItemOptionAttribute()
+            {
+                Id = Guid.NewGuid(),
+                TenantId = UserClaimsValue.TenantId,
+                SortIndex = idx,
+                ItemId = item.Id,
+                OptionAttributeId = x
+            });
+            await _context.ItemOptionAttributes.AddRangeAsync(itemOptions, cancellationToken);
+        }
+        
         await _context.SaveChangesAsync(cancellationToken);
         
         return new APIResponse().IsSuccess("Tạo món ăn thành công");

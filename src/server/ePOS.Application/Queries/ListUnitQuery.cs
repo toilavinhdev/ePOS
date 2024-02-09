@@ -48,7 +48,7 @@ public class ListUnitQueryHandler : APIRequestHandler<ListUnitQuery, ListUnitRes
         _context = context;
     }
 
-    public override Task<APIResponse<ListUnitResponse>> Handle(ListUnitQuery request, CancellationToken cancellationToken)
+    public override async Task<APIResponse<ListUnitResponse>> Handle(ListUnitQuery request, CancellationToken cancellationToken)
     {
         Expression<Func<Unit, bool>> whereExpression = x => true;
         Expression<Func<Unit, object>> sortExpression = x => x.CreatedAt;
@@ -68,11 +68,12 @@ public class ListUnitQueryHandler : APIRequestHandler<ListUnitQuery, ListUnitRes
             if (request.Sort.Contains("createdAt")) sortExpression = x => x.CreatedAt;
         }
 
-        var query = _context.Units
+        var query = await _context.Units
             .Include(x => x.Items)
             .Where(whereExpression)
             .ToSortedQuery(sortExpression, sortAsc)
-            .ToPagedQuery(request.PageIndex, request.PageSize, out var pagination);
+            .ToPagedQuery(request.PageIndex, request.PageSize, out var pagination)
+            .ToListAsync(cancellationToken);
 
         var result = new ListUnitResponse()
         {
@@ -86,6 +87,6 @@ public class ListUnitQueryHandler : APIRequestHandler<ListUnitQuery, ListUnitRes
             Pagination = pagination
         };
 
-        return Task.FromResult(new APIResponse<ListUnitResponse>().IsSuccess(result));
+        return new APIResponse<ListUnitResponse>().IsSuccess(result);
     }
 }

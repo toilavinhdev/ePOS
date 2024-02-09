@@ -9,6 +9,8 @@ public class ItemSize : AuditableEntity
     
     public double Price { get; set; }
     
+    public int SortIndex { get; set; }
+    
     public Guid ItemId { get; set; }
     [ForeignKey(nameof(ItemId))]
     public Item Item { get; set; } = default!;

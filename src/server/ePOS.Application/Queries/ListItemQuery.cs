@@ -82,13 +82,14 @@ public class ListItemQueryHandler : APIRequestHandler<ListItemQuery, ListItemRes
             if (request.Sort.Contains("createdAt")) sortExpression = x => x.CreatedAt;
         }
 
-        var query = _context.Items
+        var query = await _context.Items
             .Include(x => x.CategoryItems)
             .Include(x => x.ItemImages)
             .Include(x => x.Unit)
             .Where(whereExpression)
             .ToSortedQuery(sortExpression, sortAsc)
-            .ToPagedQuery(request.PageIndex, request.PageSize, out var pagination);
+            .ToPagedQuery(request.PageIndex, request.PageSize, out var pagination)
+            .ToListAsync(cancellationToken);
 
         var result = new ListItemResponse()
         {
@@ -99,14 +100,14 @@ public class ListItemQueryHandler : APIRequestHandler<ListItemQuery, ListItemRes
                 Name = x.Name,
                 IsActive = x.IsActive,
                 Price = x.Price,
-                SizePrices = x.ItemSizes!.Select(y => new ItemSizePriceViewModel()
+                SizePrices = x.ItemSizes?.Select(y => new ItemSizePriceViewModel()
                 {
                     Name = y.Name,
                     Price = y.Price,
                 }).ToList(),
                 UnitId = x.UnitId,
                 UnitName = x.Unit.Name,
-                Images = x.ItemImages!.Select(y => new ItemImageViewModel()
+                Images = x.ItemImages?.Select(y => new ItemImageViewModel()
                 {
                     SortIndex = y.SortIndex,
                     Url = y.Url

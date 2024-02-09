@@ -10,4 +10,6 @@ public class OptionAttributeValue : Entity
     public Guid OptionAttributeId { get; set; }
     [ForeignKey(nameof(OptionAttributeId))]
     public OptionAttribute OptionAttribute { get; set; } = default!;
+    
+    public int SortIndex { get; set; }
 }

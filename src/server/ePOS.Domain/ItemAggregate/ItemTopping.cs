@@ -13,4 +13,6 @@ public class ItemTopping : Entity
     public Guid ToppingId { get; set; }
     [ForeignKey(nameof(ToppingId))] 
     public Topping Topping { get; set; } = default!;
+    
+    public int SortIndex { get; set; }
 }

@@ -25,8 +25,6 @@ public class ItemViewModel
 
 public class ItemImageViewModel
 {
-    public Guid Id { get; set; }
-    
     public string Url { get; set; } = default!;
     
     public int SortIndex { get; set; }
@@ -34,8 +32,6 @@ public class ItemImageViewModel
 
 public class ItemSizePriceViewModel
 {
-    public Guid Id { get; set; }
-    
     public string Name { get; set; } = default!;
     
     public double Price { get; set; }
