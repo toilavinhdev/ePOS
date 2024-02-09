@@ -6,9 +6,9 @@ using MediatR;
 
 namespace ePOS.API.Configurations;
 
-public static class FluentValidationSetup
+public static class ValidationSetup
 {
-    public static IServiceCollection AddFluentValidationSetup(this IServiceCollection services)
+    public static IServiceCollection AddValidationSetup(this IServiceCollection services)
     {
         services.AddValidatorsFromAssemblyContaining<IAssemblyMaker>();
         
