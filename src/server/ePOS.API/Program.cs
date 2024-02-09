@@ -25,12 +25,12 @@ services.AddServiceRegistrations();
 var app = builder.Build();
 app.UseMiddleware<ExceptionHandlerMiddleware>();
 app.UseCorsSetup();
+app.UseStaticFileSetup(appSettings);
 app.UseSwaggerSetup();
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.MigrateDatabase();
-app.UseStaticFileSetup(appSettings);
 
 app.Run();

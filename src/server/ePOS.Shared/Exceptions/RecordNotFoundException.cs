@@ -7,7 +7,7 @@ public class RecordNotFoundException : BadRequestException
         
     }
     
-    public RecordNotFoundException(string recordName, Guid? recordId = null) : base( $"{recordName}NotFound {recordId}")
+    public RecordNotFoundException(string recordName, Guid recordId) : base( $"{recordName}NotFound {recordId}")
     {
         
     }

@@ -20,6 +20,7 @@ public static class TenantContextSeed
         await policy.ExecuteAsync(async () =>
         {
             await MigrateUser.SeedUsersAsync(context, serviceProvider);
+            await MigrateUnit.SeedUnitsAsync(context);
             await context.SaveChangesAsync();
         });
     }

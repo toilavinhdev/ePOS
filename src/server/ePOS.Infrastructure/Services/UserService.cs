@@ -93,12 +93,12 @@ public class UserService : IUserService
         };
     }
 
-    public async Task<SignUpResponse> SignUpAsync(SignUpCommand command, CancellationToken cancellationToken)
+    public async Task<SignUpResponse> SignUpAsync(SignUpCommand command, Guid tenantId, CancellationToken cancellationToken)
     {
         var user = new ApplicationUser()
         {
             Id = Guid.NewGuid(),
-            TenantId = Guid.NewGuid(),
+            TenantId = tenantId,
             FullName = command.FullName,
             Email = command.Email,
             IsAdmin = true,

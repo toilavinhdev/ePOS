@@ -1,5 +1,10 @@
 ﻿namespace ePOS.Shared.ValueObjects;
 
+public interface IAggregateRoot
+{
+    
+}
+
 public interface IEntity
 {
     public Guid Id { get; set; }

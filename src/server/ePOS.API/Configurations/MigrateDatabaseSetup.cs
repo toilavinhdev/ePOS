@@ -24,8 +24,6 @@ public static class MigrateDatabaseSetup
                 {
                     logger.LogError("Retry {0} - {1} - Exception {2}: {3}", retryCount, 5, exception.GetType().Name, exception.Message);
                 });
-            
-            context.Database.EnsureCreated();
 
             retry.Execute(() =>
             {
