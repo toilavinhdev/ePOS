@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace ePOS.Infrastructure.Migrations
+namespace ePOS.Infrastructure.Persistence.Migrations
 {
     /// <inheritdoc />
     public partial class UpdateSortIndexEntity : Migration

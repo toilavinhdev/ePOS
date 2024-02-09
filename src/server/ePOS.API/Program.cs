@@ -1,9 +1,6 @@
 using ePOS.API.Configurations;
 using ePOS.API.Middlewares;
 using ePOS.Application;
-using ePOS.Application.Common.Mediator;
-using FluentValidation;
-using MediatR;
 
 var builder = WebApplication.CreateBuilder(args);
 var environment = builder.Environment;
@@ -16,9 +13,8 @@ services.AddSwaggerSetup();
 services.AddHttpContextAccessor();
 services.AddPersistenceSetup(appSettings);
 services.AddIdentitySetup(appSettings);
-services.AddValidatorsFromAssemblyContaining<IAssemblyMaker>();
+services.AddFluentValidationSetup();
 services.AddMediatR(config => config.RegisterServicesFromAssemblyContaining<IAssemblyMaker>());
-services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));
 services.AddAutoMapper(typeof(IAssemblyMaker));
 services.AddServiceRegistrations();
 

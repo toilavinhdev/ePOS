@@ -3,20 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ePOS.Infrastructure.Persistence;
 
 #nullable disable
 
-namespace ePOS.Infrastructure.Migrations
+namespace ePOS.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(TenantContext))]
-    [Migration("20240209093705_AddTenantLibraryItemEntities")]
-    partial class AddTenantLibraryItemEntities
+    partial class TenantContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -279,6 +276,9 @@ namespace ePOS.Infrastructure.Migrations
                     b.Property<Guid>("OptionAttributeId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("SortIndex")
+                        .HasColumnType("int");
+
                     b.Property<long>("SubId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
@@ -325,6 +325,9 @@ namespace ePOS.Infrastructure.Migrations
 
                     b.Property<double>("Price")
                         .HasColumnType("float");
+
+                    b.Property<int>("SortIndex")
+                        .HasColumnType("int");
 
                     b.Property<long>("SubId")
                         .ValueGeneratedOnAdd()
@@ -397,6 +400,9 @@ namespace ePOS.Infrastructure.Migrations
                     b.Property<Guid>("ItemId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("SortIndex")
+                        .HasColumnType("int");
+
                     b.Property<long>("SubId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
@@ -444,9 +450,6 @@ namespace ePOS.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("SortIndex")
-                        .HasColumnType("int");
-
                     b.Property<long>("SubId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
@@ -474,6 +477,9 @@ namespace ePOS.Infrastructure.Migrations
 
                     b.Property<Guid>("OptionAttributeId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("SortIndex")
+                        .HasColumnType("int");
 
                     b.Property<long>("SubId")
                         .ValueGeneratedOnAdd()
@@ -600,6 +606,9 @@ namespace ePOS.Infrastructure.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
 
                     b.Property<long>("SubId")
                         .ValueGeneratedOnAdd()

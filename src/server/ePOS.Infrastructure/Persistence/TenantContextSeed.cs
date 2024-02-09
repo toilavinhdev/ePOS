@@ -1,4 +1,4 @@
-﻿using ePOS.Infrastructure.MigrateData;
+﻿using ePOS.Infrastructure.Persistence.MigrateData;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
 using Polly;
