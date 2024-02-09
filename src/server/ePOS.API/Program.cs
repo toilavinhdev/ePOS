@@ -13,7 +13,7 @@ services.AddSwaggerSetup();
 services.AddHttpContextAccessor();
 services.AddPersistenceSetup(appSettings);
 services.AddIdentitySetup(appSettings);
-services.AddFluentValidationSetup();
+services.AddValidationSetup();
 services.AddMediatR(config => config.RegisterServicesFromAssemblyContaining<IAssemblyMaker>());
 services.AddAutoMapper(typeof(IAssemblyMaker));
 services.AddServiceRegistrations();
