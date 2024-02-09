@@ -52,6 +52,9 @@ public class CreateItemCommandHandler : APIRequestHandler<CreateItemCommand>
             throw new RecordNotFoundException(nameof(Unit));
 
         if (request is { Price: null, SizePrices: null }) throw new BadRequestException("Missing item price or size");
+        
+        if (await _context.Items.AnyAsync(x => x.Sku.Equals(request.Sku), cancellationToken)) 
+            throw new DuplicateValueException(nameof(Item.Sku));
 
         var item = new Item()
         {
