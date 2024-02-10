@@ -1,1 +1,8 @@
 <p>sign-in works!</p>
+<form [formGroup]="form">
+  <input pInputText formControlName="email">
+  <input pInputText formControlName="password">
+  <p-button label="Đăng nhập"
+            (onClick)="onSignIn()"
+            [disabled]="form.invalid"></p-button>
+</form>
