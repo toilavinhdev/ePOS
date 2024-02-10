@@ -10,7 +10,7 @@ public static class ValidationSetup
 {
     public static IServiceCollection AddValidationSetup(this IServiceCollection services)
     {
-        services.AddValidatorsFromAssemblyContaining<IAssemblyMaker>();
+        services.AddValidatorsFromAssembly(ApplicationAssembly.Assembly);
         
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));
         

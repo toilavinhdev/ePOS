@@ -26,7 +26,7 @@ public class GetTenantQueryHandler : APIRequestHandler<GetTenantQuery, TenantVie
 
         var data = new TenantViewModel()
         {
-            Id = Guid.NewGuid(),
+            Id = tenant.Id,
             Code = tenant.Code,
             Name = tenant.Name,
             LogoUrl = tenant.LogoUrl,
