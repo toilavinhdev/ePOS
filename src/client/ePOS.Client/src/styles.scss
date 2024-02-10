@@ -1,1 +1,48 @@
 /* You can add global styles to this file, and also import other style files */
+@import "assets/fontawesome/css/all.css";
+@import "./assets/fonts/lexend-deca.css";
+@import "primeng/resources/themes/lara-light-blue/theme.css";
+@import "primeng/resources/primeng.css";
+@import "primeicons/primeicons.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary: #3B82F6;
+  --white: #FFFFF;
+  --black: #414141;
+  --red: #f5365c;
+  --success: #2dce89;
+  --info: #11cdef;
+  --warning: #fb6340;
+}
+
+html {
+  font-size: 14px;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+}
+
+* {
+  font-family: "Lexend Deca", sans-serif;
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  text-decoration: none;
+
+  &:active {
+    color: unset
+  }
+}
+
+label {
+  color: var(--black)
+}
