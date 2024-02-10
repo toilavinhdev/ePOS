@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using ePOS.Application.Common.Contracts;
+﻿using ePOS.Application.Common.Contracts;
 using ePOS.Application.Common.Mediator;
 using ePOS.Domain.ItemAggregate;
 using ePOS.Domain.OptionAttributeAggregate;

@@ -31,7 +31,7 @@ public class ListItemResponse
 {
     public List<ItemViewModel> Records { get; set; } = default!;
 
-    public Paginator Pagination { get; set; } = default!;
+    public Paginator Paginator { get; set; } = default!;
 }
 
 public class ListItemQueryValidator : AbstractValidator<ListItemQuery>
@@ -79,16 +79,21 @@ public class ListItemQueryHandler : APIRequestHandler<ListItemQuery, ListItemRes
             if (request.Sort.Contains("name")) sortExpression = x => x.Name;
             if (request.Sort.Contains("createdAt")) sortExpression = x => x.CreatedAt;
             if (request.Sort.Contains("isActive")) sortExpression = x => x.IsActive;
-            if (request.Sort.Contains("createdAt")) sortExpression = x => x.CreatedAt;
         }
 
         var query = await _context.Items
             .Include(x => x.CategoryItems)
             .Include(x => x.ItemImages)
             .Include(x => x.Unit)
+            .Include(x => x.ItemSizes)
+            .Include(x => x.ItemOptionAttributes)!
+                .ThenInclude(x => x.OptionAttribute)
+                    .ThenInclude(x => x.OptionAttributeValues)
+            .Include(x => x.ItemToppings)!
+                .ThenInclude(x => x.Topping)
             .Where(whereExpression)
             .ToSortedQuery(sortExpression, sortAsc)
-            .ToPagedQuery(request.PageIndex, request.PageSize, out var pagination)
+            .ToPagedQuery(request.PageIndex, request.PageSize, out var paginator)
             .ToListAsync(cancellationToken);
 
         var result = new ListItemResponse()
@@ -104,7 +109,7 @@ public class ListItemQueryHandler : APIRequestHandler<ListItemQuery, ListItemRes
                 {
                     Name = y.Name,
                     Price = y.Price,
-                }).ToList(),
+                }).ToList() ?? new List<ItemSizePriceViewModel>(),
                 UnitId = x.UnitId,
                 UnitName = x.Unit.Name,
                 Images = x.ItemImages?.Select(y => new ItemImageViewModel()
@@ -112,9 +117,29 @@ public class ListItemQueryHandler : APIRequestHandler<ListItemQuery, ListItemRes
                     SortIndex = y.SortIndex,
                     Url = y.Url
                 }).ToList(),
+                OptionAttributes = x.ItemOptionAttributes?
+                    .Select(y => y.OptionAttribute)
+                    .Select(y => new OptionAttributeViewModel()
+                    {
+                        Id = y.Id,
+                        Name = y.Name,
+                        IsActive = y.IsActive,
+                        ItemCount = y.ItemOptionAttributes?.Count ?? 0,
+                        Attributes = y.OptionAttributeValues.Select(z => z.Name).ToArray()
+                    }).ToList() ?? new List<OptionAttributeViewModel>(),
+                Toppings = x.ItemToppings?
+                    .Select(y => y.Topping)
+                    .Select(y => new ToppingViewModel()
+                    {
+                        Id = y.Id,
+                        Name = y.Name,
+                        IsActive = y.IsActive,
+                        Price = y.Price,
+                        ItemCount = y.ItemToppings?.Count ?? 0
+                    }).ToList() ?? new List<ToppingViewModel>(), 
                 CreatedAt = x.CreatedAt
             }).ToList(),
-            Pagination = pagination
+            Paginator = paginator
         };
 
         return new APIResponse<ListItemResponse>().IsSuccess(result);

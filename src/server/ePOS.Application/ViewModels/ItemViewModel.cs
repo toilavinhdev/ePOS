@@ -20,6 +20,10 @@ public class ItemViewModel
     
     public List<ItemImageViewModel>? Images { get; set; } 
     
+    public List<OptionAttributeViewModel>? OptionAttributes { get; set; }
+    
+    public List<ToppingViewModel>? Toppings { get; set; }
+    
     public DateTimeOffset CreatedAt { get; set; }
 }
 
