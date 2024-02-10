@@ -14,8 +14,8 @@ services.AddHttpContextAccessor();
 services.AddPersistenceSetup(appSettings);
 services.AddIdentitySetup(appSettings);
 services.AddValidationSetup();
-services.AddMediatR(config => config.RegisterServicesFromAssemblyContaining<IAssemblyMaker>());
-services.AddAutoMapper(typeof(IAssemblyMaker));
+services.AddMediatR(config => config.RegisterServicesFromAssembly(ApplicationAssembly.Assembly));
+services.AddAutoMapper(ApplicationAssembly.Assembly);
 services.AddServiceRegistrations();
 
 var app = builder.Build();
