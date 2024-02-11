@@ -1,10 +1,12 @@
-import { IAppState } from '@app-shared/store/app.state';
-import { createSelector } from '@ngrx/store';
+import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { IUserState } from '@app-shared/store/user/user.reducer';
+import { appStateKey } from '@app-shared/store/app.state';
 
-export const selectUserState = (state: IAppState) => state.userState;
+export const featureUser = createFeatureSelector<IUserState>(
+  appStateKey.feature_user,
+);
 
-export const selectLoadingSignIn = createSelector(
-  selectUserState,
-  (state: IUserState) => state.loadingSignIn,
+export const userLoadingSelector = createSelector(
+  featureUser,
+  (state) => state.loading,
 );

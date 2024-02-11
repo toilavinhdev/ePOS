@@ -1,1 +1,8 @@
-<p>spinner-overlay works!</p>
+<ng-container *ngIf="progress">
+  <div id="progressSpinner"
+       class="fixed z-[1000] top-0 left-0 h-screen w-screen flex justify-center items-center bg-[#41414170]">
+    <p-progressSpinner styleClass="w-[70px] h-[70px]"
+                       strokeWidth="7"
+                       animationDuration="2s"></p-progressSpinner>
+  </div>
+</ng-container>

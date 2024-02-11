@@ -5,8 +5,12 @@ import {
   ISignInResponse,
 } from '@app-shared/models/user.models';
 import { map, Observable } from 'rxjs';
-import { IAPIResponse } from '@app-shared/core/models/common.models';
+import {
+  IAPIResponse,
+  IUserClaimsValue,
+} from '@app-shared/core/models/common.models';
 import { HttpClient } from '@angular/common/http';
+import { USER_DATA } from '@app-shared/constants';
 
 @Injectable({
   providedIn: 'root',
@@ -21,5 +25,11 @@ export class UserService extends BaseService {
     return this.httpClient
       .post<IAPIResponse<ISignInResponse>>(this.getApiUrl('sign-in'), payload)
       .pipe(map((response) => response.data));
+  }
+
+  getUserClaimsValidExp(): IUserClaimsValue | null {
+    const data = localStorage.getItem(USER_DATA);
+    const userClaims = data ? (JSON.parse(data) as IUserClaimsValue) : null;
+    return userClaims && userClaims.exp * 1000 > Date.now() ? userClaims : null;
   }
 }

@@ -8,14 +8,19 @@ import { authorizationInterceptor } from '@app-shared/core/interceptors/authoriz
 import { provideStore } from '@ngrx/store';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { provideEffects } from '@ngrx/effects';
+import { userReducer } from '@app-shared/store/user/user.reducer';
+import { UserEffects } from '@app-shared/store/user/user.effects';
+import { appStateKey } from '@app-shared/store/app.state';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
     provideAnimations(),
     provideHttpClient(withInterceptors([authorizationInterceptor])),
-    provideStore(),
+    provideStore({
+      [appStateKey.feature_user]: userReducer,
+    }),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
-    provideEffects()
-],
+    provideEffects([UserEffects]),
+  ],
 };

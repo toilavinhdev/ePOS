@@ -4,30 +4,29 @@ import {
   signInFailed,
   signInSuccess,
 } from '@app-shared/store/user/user.actions';
+import { IUserClaimsValue } from '@app-shared/core/models/common.models';
+import { USER_DATA } from '@app-shared/constants';
 
 export interface IUserState {
-  loadingSignIn: boolean;
-  error?: string;
+  loading: boolean;
 }
 
 const initialState: IUserState = {
-  loadingSignIn: false,
+  loading: false,
 };
 
 export const userReducer = createReducer(
   initialState,
   on(signIn, (state, { payload }) => ({
     ...state,
-    loadingSignIn: true,
+    loading: true,
   })),
   on(signInSuccess, (state, { data }) => ({
     ...state,
-    loadingSignIn: false,
-    error: undefined,
+    loading: false,
   })),
   on(signInFailed, (state, { error }) => ({
     ...state,
-    loadingSignIn: false,
-    error: error.error.message,
+    loading: false,
   })),
 );
