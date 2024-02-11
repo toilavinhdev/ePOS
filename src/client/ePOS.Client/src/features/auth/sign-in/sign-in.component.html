@@ -1,1 +1,27 @@
-<p>sign-in works!</p>
+<section>
+  <div class="font-[600] text-[32px]">Đăng nhập</div>
+  <div class="text-[12px] mt-2">Chưa có tài khoản? <a routerLink="/auth/sign-up" class="underline text-[#000]">Tạo tài khoản mới</a></div>
+
+  <form [formGroup]="form" class="mt-[80px]">
+    <div class="flex flex-col gap-2">
+      <label>Email:</label>
+      <input pInputText
+             formControlName="email">
+    </div>
+    <div class="flex flex-col gap-2 mt-4">
+      <label>Mật khẩu:</label>
+      <p-password formControlName="password"
+                  [feedback]="false"
+                  [toggleMask]="true"
+                  styleClass="w-full"
+                  inputStyleClass="w-full"></p-password>
+      <small>Mật khẩu có ít nhất 6 ký tự.</small>
+    </div>
+    <p-button label="Đăng nhập"
+              size="large"
+              styleClass="w-full mt-6"
+              (onClick)="onSignIn()"
+              [disabled]="form.invalid"
+              [loading]="(loading$ | async)!"></p-button>
+  </form>
+</section>
