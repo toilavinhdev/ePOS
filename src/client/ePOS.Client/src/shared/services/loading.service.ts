@@ -13,6 +13,11 @@ export class LoadingService {
     return this._subject$;
   }
 
+  action(progress: boolean) {
+    if (progress) this.show();
+    else this.hide();
+  }
+
   show() {
     this._subject$.next(true);
   }

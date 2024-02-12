@@ -14,3 +14,10 @@ export interface ISignUpRequest {
   email: string;
   password: string;
 }
+
+export interface IGetMeResponse {
+  id: string;
+  fullName?: string;
+  email: string;
+  avatarUrl?: string;
+}

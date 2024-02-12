@@ -1,10 +1,18 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { NotificationService, UserService } from '@app-shared/services';
 import {
+  LoadingService,
+  NotificationService,
+  UserService,
+} from '@app-shared/services';
+import {
+  getMe,
+  getMeFailed,
+  getMeSuccess,
   signIn,
   signInFailed,
   signInSuccess,
+  signOut,
   signUp,
   signUpFailed,
   signUpSuccess,
@@ -21,6 +29,7 @@ export class UserEffects {
     private actions$: Actions,
     private userService: UserService,
     private notificationService: NotificationService,
+    private loadingService: LoadingService,
     private router: Router,
   ) {}
 
@@ -111,5 +120,42 @@ export class UserEffects {
     {
       dispatch: false,
     },
+  );
+
+  signOut$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(signOut),
+        tap(() => {
+          this.userService.signOut();
+          this.router.navigate(['/auth/sign-in']).then();
+        }),
+      ),
+    { dispatch: false },
+  );
+
+  getMe$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(getMe),
+      tap(() => this.loadingService.show()),
+      switchMap(() =>
+        this.userService.getMe().pipe(
+          map((data) => getMeSuccess({ data: data })),
+          catchError(() => of(getMeFailed())),
+        ),
+      ),
+      tap(() => this.loadingService.hide()),
+    ),
+  );
+
+  getMeFailed$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(getMeFailed),
+        tap(() => {
+          this.notificationService.error('Lấy dữ liệu người dùng thất bại');
+        }),
+      ),
+    { dispatch: false },
   );
 }

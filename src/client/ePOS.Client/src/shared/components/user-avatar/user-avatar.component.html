@@ -1,0 +1,42 @@
+<div class="flex gap-x-5 items-center">
+  <div class="text-right">
+    <div class="font-medium text-black">{{ (profile$ | async)?.fullName }}</div>
+    <div class="text-[12px] text-black">{{ (profile$ | async)?.email }}</div>
+  </div>
+  <p-avatar [image]="(profile$ | async)?.avatarUrl ?? defaultAvatarPath"
+            shape="circle"
+            size="normal"
+            pRipple
+            class="hover:cursor-pointer"
+            (click)="visible = !visible"
+            [style]="{ 'background-color': '#4458d5', color: '#ffffff', height: '32px', width: '32px', borderRadius: '50%' }"></p-avatar>
+
+  <p-overlay [(visible)]="visible" contentStyleClass="mr-[32px]">
+    <div class="w-[160px] bg-[#FFF] px-4 py-6 mt-4 rounded-[6px] shadow-lg">
+      <div class="text-[10px] font-bold uppercase px-2">Xin chào!</div>
+      <div class="mt-3">
+        <ng-container [ngTemplateOutlet]="menuItem"
+                      [ngTemplateOutletContext]="{title: 'Hồ sơ', faIcon: 'fa-solid fa-user', url: '/profile'}"></ng-container>
+        <div class="bg-[#f2f2f2] w-full h-[1px] my-2"></div>
+        <div (click)="onSignOut()">
+          <ng-container [ngTemplateOutlet]="menuItem"
+                        [ngTemplateOutletContext]="{title: 'Đăng xuất', faIcon: 'fa-solid fa-power-off'}"></ng-container>
+        </div>
+      </div>
+    </div>
+  </p-overlay>
+</div>
+
+
+<ng-template #menuItem let-title="title" let-faIcon="faIcon" let-url="url">
+  <div *ngIf="url" [routerLink]="url ? url : undefined" (click)="visible = false"
+       class="flex gap-x-5 p-3 rounded transition duration-400 hover:bg-[#f2f2f2] hover:cursor-pointer">
+    <div><i class="{{ faIcon }}"></i></div>
+    <div class="flex-1">{{ title }}</div>
+  </div>
+  <div *ngIf="!url" (click)="visible = false"
+       class="flex gap-x-5 p-3 rounded transition duration-400 hover:bg-[#f2f2f2] hover:cursor-pointer">
+    <div><i class="{{ faIcon }}"></i></div>
+    <div class="flex-1">{{ title }}</div>
+  </div>
+</ng-template>

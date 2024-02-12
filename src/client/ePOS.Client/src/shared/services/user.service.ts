@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BaseService } from '@app-shared/core/abtractions/base.service';
 import {
+  IGetMeResponse,
   ISignInRequest,
   ISignInResponse,
   ISignUpRequest,
@@ -11,7 +12,7 @@ import {
   IUserClaimsValue,
 } from '@app-shared/core/models/common.models';
 import { HttpClient } from '@angular/common/http';
-import { USER_DATA } from '@app-shared/constants';
+import { ACCESS_TOKEN, REFRESH_TOKEN, USER_DATA } from '@app-shared/constants';
 
 @Injectable({
   providedIn: 'root',
@@ -33,6 +34,18 @@ export class UserService extends BaseService {
       this.getApiUrl('sign-up'),
       payload,
     );
+  }
+
+  signOut() {
+    localStorage.removeItem(ACCESS_TOKEN);
+    localStorage.removeItem(REFRESH_TOKEN);
+    localStorage.removeItem(USER_DATA);
+  }
+
+  getMe(): Observable<IGetMeResponse> {
+    return this.httpClient
+      .get<IAPIResponse<IGetMeResponse>>(this.getApiUrl('me'))
+      .pipe(map((response) => response.data));
   }
 
   getUserClaimsValidExp(): IUserClaimsValue | null {

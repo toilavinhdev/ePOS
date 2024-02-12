@@ -1,0 +1,28 @@
+<div class="h-full bg-[#FFF] shadow-lg">
+  <ng-container [ngTemplateOutlet]="logo"></ng-container>
+  <ng-container *ngFor="let item of items">
+    <ng-container *ngIf="!item['hidden']"
+                  [ngTemplateOutlet]="menuItem"
+                  [ngTemplateOutletContext]="{$implicit: item}"></ng-container>
+  </ng-container>
+</div>
+
+<ng-template #logo>
+  <div class="py-6 hover:cursor-pointer">
+    <div class="font-bold text-primary text-center text-xl uppercase leading-4">ePOS</div>
+    <div class="text-center font-semibold text-[8px] uppercase">Smart Seller</div>
+  </div>
+</ng-template>
+
+<ng-template #menuItem let-item>
+  <div [routerLink]="item['url']"
+       class="relative px-3 py-3 hover:bg-[#f2f2f2] cursor-pointer focus-visible:outline-primary">
+    <div class="text-center">
+      <i class="{{item['faIcon']}} {{item['selected'] ? 'text-primary' : 'text-[#9a9a9a]'}} text-2xl transition duration-400"></i>
+    </div>
+    <div class="text-center text-xs font-bold transition duration-400 {{item['selected'] ? '' : 'text-[#9a9a9a]'}}">
+      {{ item['title'] }}
+    </div>
+    <div *ngIf="item['selected']" class="absolute top-1/2 left-0 -translate-y-1/2 bg-primary w-1 h-5"></div>
+  </div>
+</ng-template>

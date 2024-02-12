@@ -10,3 +10,8 @@ export const userLoadingSelector = createSelector(
   featureUser,
   (state) => state.loading,
 );
+
+export const userProfileSelector = createSelector(
+  featureUser,
+  (state) => state.profile,
+);

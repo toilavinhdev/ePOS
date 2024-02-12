@@ -1,0 +1,30 @@
+<section class="e-card-content">
+  <div class="e-card-header">Thông tin người dùng</div>
+
+  <div class="flex gap-x-[40px] e-card-body">
+    <app-upload-image [src]="avatarUrl.value"></app-upload-image>
+
+    <form [formGroup]="profileForm">
+      <div class="flex flex-col gap-y-1">
+        <label>Tên đầy đủ:</label>
+        <input pInputText
+               formControlName="fullName"
+               class="w-[400px]"/>
+      </div>
+      <div class="flex flex-col gap-y-1 mt-4">
+        <label>Email:</label>
+        <input pInputText
+               formControlName="email"
+               class="w-[400px]"/>
+      </div>
+
+      <div class="space-x-3 mt-2">
+        <p-button label="Cập nhật"
+                  styleClass="mt-4"></p-button>
+        <p-button label="Đổi mật khẩu"
+                  severity="secondary"
+                  [outlined]="true"></p-button>
+      </div>
+    </form>
+  </div>
+</section>
