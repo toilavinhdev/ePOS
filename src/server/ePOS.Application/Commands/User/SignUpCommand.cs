@@ -54,7 +54,7 @@ public class SignUpCommandHandler : APIRequestHandler<SignUpCommand, SignUpRespo
     public override async Task<APIResponse<SignUpResponse>> Handle(SignUpCommand request, CancellationToken cancellationToken)
     {
         if (await _context.Tenants.AnyAsync(x => x.Name.Equals(request.TenantName), cancellationToken))
-            throw new DuplicateValueException(nameof(Tenant.Name));
+            throw new DuplicateValueException("TenantName");
         
         var tenant = new Tenant()
         {

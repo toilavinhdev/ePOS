@@ -16,6 +16,7 @@ import { BaseComponent } from '@app-shared/core/abtractions';
 import { RouterLink } from '@angular/router';
 import { PasswordModule } from 'primeng/password';
 import { emailRegex } from '@app-shared/utilities';
+import { NotificationService } from '@app-shared/services';
 
 @Component({
   selector: 'app-sign-in',
@@ -38,6 +39,7 @@ export class SignInComponent extends BaseComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private store: Store,
+    private notificationService: NotificationService,
   ) {
     super();
     this.loading$ = this.store
@@ -62,5 +64,9 @@ export class SignInComponent extends BaseComponent implements OnInit {
   onSignIn() {
     if (this.form.invalid) return;
     this.store.dispatch(signIn({ payload: this.form.value as ISignInRequest }));
+  }
+
+  onSignInGoogle() {
+    this.notificationService.info('Chức năng đang phát triển');
   }
 }

@@ -1,1 +1,46 @@
-<p>sign-up works!</p>
+<section>
+  <div class="font-[800] text-[26px] text-black">Tạo tài khoản mới</div>
+  <div class="text-[12px] text-[#6b7280] mt-1">Đăng ký bán hàng miễn phí với ePOS</div>
+
+  <form [formGroup]="form" class="mt-[48px]">
+    <div class="flex flex-col gap-2">
+      <label>Tên thương hiệu:</label>
+      <input pInputText
+             formControlName="tenantName">
+    </div>
+    <div class="flex flex-col gap-2 mt-5">
+      <label>Tên đầy đủ:</label>
+      <input pInputText
+             formControlName="fullName">
+    </div>
+    <div class="flex flex-col gap-2 mt-5">
+      <label>Email:</label>
+      <input pInputText
+             formControlName="email">
+    </div>
+    <div class="flex flex-col gap-2 mt-5">
+      <label>Mật khẩu:</label>
+      <p-password formControlName="password"
+                  [feedback]="false"
+                  [toggleMask]="true"
+                  styleClass="w-full"
+                  inputStyleClass="w-full"></p-password>
+      <small>Mật khẩu có ít nhất 6 ký tự.</small>
+    </div>
+    <div class="flex flex-col gap-2 mt-5">
+      <label>Xác nhận mật khẩu:</label>
+      <p-password formControlName="confirmPassword"
+                  [feedback]="false"
+                  [toggleMask]="true"
+                  styleClass="w-full"
+                  inputStyleClass="w-full"></p-password>
+    </div>
+    <p-button label="Tạo tài khoản"
+              size="large"
+              styleClass="w-full mt-10"
+              (onClick)="onSignUp()"
+              [disabled]="form.invalid"
+              [loading]="(loading$ | async)!"></p-button>
+  </form>
+  <div class="text-center text-black mt-8">Đã có tài khoản? <a routerLink="/auth/sign-in" class="underline text-black">Đăng nhập ngay</a></div>
+</section>

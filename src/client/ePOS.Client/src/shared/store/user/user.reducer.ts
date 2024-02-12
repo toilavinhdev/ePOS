@@ -3,6 +3,9 @@ import {
   signIn,
   signInFailed,
   signInSuccess,
+  signUp,
+  signUpFailed,
+  signUpSuccess,
 } from '@app-shared/store/user/user.actions';
 import { IUserClaimsValue } from '@app-shared/core/models/common.models';
 import { USER_DATA } from '@app-shared/constants';
@@ -26,6 +29,18 @@ export const userReducer = createReducer(
     loading: false,
   })),
   on(signInFailed, (state, { error }) => ({
+    ...state,
+    loading: false,
+  })),
+  on(signUp, (state, { payload }) => ({
+    ...state,
+    loading: true,
+  })),
+  on(signUpSuccess, (state) => ({
+    ...state,
+    loading: false,
+  })),
+  on(signUpFailed, (state, { error }) => ({
     ...state,
     loading: false,
   })),
