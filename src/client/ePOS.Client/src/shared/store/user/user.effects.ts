@@ -5,6 +5,9 @@ import {
   signIn,
   signInFailed,
   signInSuccess,
+  signUp,
+  signUpFailed,
+  signUpSuccess,
 } from '@app-shared/store/user/user.actions';
 import { catchError, map, of, switchMap, tap } from 'rxjs';
 import { Router } from '@angular/router';
@@ -65,5 +68,48 @@ export class UserEffects {
         }),
       ),
     { dispatch: false },
+  );
+
+  signUp$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(signUp),
+      switchMap(({ payload }) =>
+        this.userService.signUp(payload).pipe(
+          map(() => signUpSuccess()),
+          catchError((err) => of(signUpFailed({ error: err }))),
+        ),
+      ),
+    ),
+  );
+
+  signUpSuccess$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(signUpSuccess),
+        tap(() => {
+          this.notificationService.success('Đăng ký thành công');
+          this.router.navigate(['/auth/sign-in']).then();
+        }),
+      ),
+    { dispatch: false },
+  );
+
+  signUpFailed$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(signUpFailed),
+        tap(({ error }) => {
+          const message = error.error.message;
+          if (message === 'DuplicateUserName;DuplicateEmail') {
+            this.notificationService.error('Email đã được sử dụng');
+          }
+          if (message === 'DuplicateTenantName') {
+            this.notificationService.error('Tên thương hiệu đã tồn tại');
+          }
+        }),
+      ),
+    {
+      dispatch: false,
+    },
   );
 }
