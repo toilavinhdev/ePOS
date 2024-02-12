@@ -1,5 +1,8 @@
 import { createReducer, on } from '@ngrx/store';
 import {
+  getMe,
+  getMeFailed,
+  getMeSuccess,
   signIn,
   signInFailed,
   signInSuccess,
@@ -9,30 +12,35 @@ import {
 } from '@app-shared/store/user/user.actions';
 import { IUserClaimsValue } from '@app-shared/core/models/common.models';
 import { USER_DATA } from '@app-shared/constants';
+import { IGetMeResponse } from '@app-shared/models/user.models';
 
 export interface IUserState {
   loading: boolean;
+  loadingMe: boolean;
+  profile?: IGetMeResponse;
 }
 
 const initialState: IUserState = {
   loading: false,
+  loadingMe: false,
+  profile: undefined,
 };
 
 export const userReducer = createReducer(
   initialState,
-  on(signIn, (state, { payload }) => ({
+  on(signIn, (state) => ({
     ...state,
     loading: true,
   })),
-  on(signInSuccess, (state, { data }) => ({
+  on(signInSuccess, (state) => ({
     ...state,
     loading: false,
   })),
-  on(signInFailed, (state, { error }) => ({
+  on(signInFailed, (state) => ({
     ...state,
     loading: false,
   })),
-  on(signUp, (state, { payload }) => ({
+  on(signUp, (state) => ({
     ...state,
     loading: true,
   })),
@@ -40,8 +48,18 @@ export const userReducer = createReducer(
     ...state,
     loading: false,
   })),
-  on(signUpFailed, (state, { error }) => ({
+  on(signUpFailed, (state) => ({
     ...state,
     loading: false,
+  })),
+  on(getMe, (state) => ({
+    ...state,
+  })),
+  on(getMeSuccess, (state, { data }) => ({
+    ...state,
+    profile: data,
+  })),
+  on(getMeFailed, (state) => ({
+    ...state,
   })),
 );

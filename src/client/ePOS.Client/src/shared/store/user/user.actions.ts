@@ -1,5 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import {
+  IGetMeResponse,
   ISignInRequest,
   ISignInResponse,
   ISignUpRequest,
@@ -32,3 +33,14 @@ export const signUpFailed = createAction(
   '[User] Sign Up Failed',
   props<{ error: HttpErrorResponse }>(),
 );
+
+export const signOut = createAction('[User] Sign Out');
+
+export const getMe = createAction('[User] Get Me');
+
+export const getMeSuccess = createAction(
+  '[User] Get Me Success',
+  props<{ data: IGetMeResponse }>(),
+);
+
+export const getMeFailed = createAction('[User] Get Me Failed');
