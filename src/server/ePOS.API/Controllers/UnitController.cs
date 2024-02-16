@@ -30,4 +30,11 @@ public class UnitController : ControllerBase
     {
         return Ok(await _mediator.Send(command));
     }
+    
+    [HttpPut("update")]
+    [ApplicationPermission]
+    public async Task<IActionResult> Update([FromBody] UpdateUnitCommand command)
+    {
+        return Ok(await _mediator.Send(command));
+    }
 }

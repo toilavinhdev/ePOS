@@ -17,7 +17,7 @@ export class StorageService extends BaseService {
     let formData = new FormData();
     formData.append('file', file);
     return this.httpClient
-      .post<IAPIResponse<string>>(this.getApiUrl('upload-file'), formData)
+      .post<IAPIResponse<string>>(this.getApiUrl('upload'), formData)
       .pipe(map((response) => response.data));
   }
 
@@ -27,7 +27,7 @@ export class StorageService extends BaseService {
       formData.append('files', file);
     });
     return this.httpClient
-      .post<IAPIResponse<string[]>>(this.getApiUrl('upload-files'), formData)
+      .post<IAPIResponse<string[]>>(this.getApiUrl('upload-multiple'), formData)
       .pipe(map((response) => response.data));
   }
 }

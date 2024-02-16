@@ -13,8 +13,8 @@ export class BaseService {
     this.endpoint = `${this.host}/api/v1/${controller}`;
   }
 
-  protected getApiUrl(action: string) {
-    return `${this.endpoint}/${action}`;
+  protected getApiUrl(action?: string) {
+    return action ? `${this.endpoint}/${action}` : this.endpoint;
   }
 
   protected createParams(params?: { [key: string]: any }) {

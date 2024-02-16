@@ -6,3 +6,6 @@ export * from './main-container/main-container.component';
 export * from './menu/menu.component';
 export * from './sidebar/sidebar.component';
 export * from './user-avatar/user-avatar.component';
+export * from './dynamic-table/dynamic-table.component';
+export * from './tab-menu/tab-menu.component';
+export * from './section-content/section-content.component';
