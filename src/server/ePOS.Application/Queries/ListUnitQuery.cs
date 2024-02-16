@@ -27,7 +27,7 @@ public class ListUnitResponse
 {
     public List<UnitViewModel> Records { get; set; } = default!;
 
-    public Paginator Pagination { get; set; } = default!;
+    public Paginator Paginator { get; set; } = default!;
 }
 
 public class ListUnitQueryValidator : AbstractValidator<ListUnitQuery>
@@ -72,7 +72,7 @@ public class ListUnitQueryHandler : APIRequestHandler<ListUnitQuery, ListUnitRes
             .Include(x => x.Items)
             .Where(whereExpression)
             .ToSortedQuery(sortExpression, sortAsc)
-            .ToPagedQuery(request.PageIndex, request.PageSize, out var pagination)
+            .ToPagedQuery(request.PageIndex, request.PageSize, out var paginator)
             .ToListAsync(cancellationToken);
 
         var result = new ListUnitResponse()
@@ -84,7 +84,7 @@ public class ListUnitQueryHandler : APIRequestHandler<ListUnitQuery, ListUnitRes
                 IsDefault = x.IsDefault,
                 ItemCount = x.Items!.Count
             }).ToList(),
-            Pagination = pagination
+            Paginator = paginator
         };
 
         return new APIResponse<ListUnitResponse>().IsSuccess(result);

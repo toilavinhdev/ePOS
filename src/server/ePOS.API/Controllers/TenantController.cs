@@ -1,4 +1,5 @@
-﻿using ePOS.Application.Queries;
+﻿using ePOS.Application.Commands;
+using ePOS.Application.Queries;
 using ePOS.Infrastructure.Identity.Authorization;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -21,5 +22,12 @@ public class TenantController : ControllerBase
     public async Task<IActionResult> Get()
     {
         return Ok(await _mediator.Send(new GetTenantQuery()));
+    }
+
+    [HttpPut("update")]
+    [ApplicationPermission]
+    public async Task<IActionResult> Update([FromBody] UpdateTenantCommand command)
+    {
+        return Ok(await _mediator.Send(command));
     }
 }

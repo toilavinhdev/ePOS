@@ -1,1 +1,9 @@
-<p>setting works!</p>
+<app-tab-menu [items]="tabItems" (activeChange)="currentTabId = $event"></app-tab-menu>
+@switch (currentTabId) {
+  @case ('tenant') {
+    <app-setting-tenant></app-setting-tenant>
+  }
+  @case ('unit') {
+    <app-setting-unit></app-setting-unit>
+  }
+}

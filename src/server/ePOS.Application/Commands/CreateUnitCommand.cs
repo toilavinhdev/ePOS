@@ -8,7 +8,7 @@ using FluentValidation;
 
 namespace ePOS.Application.Commands;
 
-public class CreateUnitCommand : IAPIRequest
+public class CreateUnitCommand : IAPIRequest<UnitViewModel>
 {
     public string Name { get; set; } = default!;
 }
@@ -21,16 +21,19 @@ public class CreateUnitCommandValidator : AbstractValidator<CreateUnitCommand>
     }
 }  
 
-public class CreateUnitCommandCommandHandler : APIRequestHandler<CreateUnitCommand>
+public class CreateUnitCommandCommandHandler : APIRequestHandler<CreateUnitCommand, UnitViewModel>
 {
     private readonly ITenantContext _context;
+    private readonly IMapper _mapper;
 
-    public CreateUnitCommandCommandHandler(IUserService userService, ITenantContext context) : base(userService)
+    public CreateUnitCommandCommandHandler(IUserService userService, 
+        ITenantContext context, IMapper mapper) : base(userService)
     {
         _context = context;
+        _mapper = mapper;
     }
 
-    public override async Task<APIResponse> Handle(CreateUnitCommand request, CancellationToken cancellationToken)
+    public override async Task<APIResponse<UnitViewModel>> Handle(CreateUnitCommand request, CancellationToken cancellationToken)
     {
         var unit = new Unit()
         {
@@ -43,6 +46,8 @@ public class CreateUnitCommandCommandHandler : APIRequestHandler<CreateUnitComma
         await _context.Units.AddAsync(unit, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
 
-        return new APIResponse().IsSuccess("Tạo đơn vị thành công");
+        var data = _mapper.Map<UnitViewModel>(unit);
+
+        return new APIResponse<UnitViewModel>().IsSuccess(data, "Tạo đơn vị thành công");
     }
 }

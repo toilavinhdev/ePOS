@@ -1,0 +1,13 @@
+<section class="epos-section-content">
+  @if (!customTitle) {
+    <div class="epos-section-header">{{ title }}</div>
+  } @else {
+    <ng-container [ngTemplateOutlet]="customTitle"></ng-container>
+  }
+
+  @if (loading) {
+    Đang tải...
+  } @else {
+    <ng-content></ng-content>
+  }
+</section>

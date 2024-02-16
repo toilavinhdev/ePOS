@@ -31,7 +31,7 @@ public class GetTenantQueryHandler : APIRequestHandler<GetTenantQuery, TenantVie
             Name = tenant.Name,
             LogoUrl = tenant.LogoUrl,
             TaxId = tenant.TaxId,
-            CompanyName = tenant.Name,
+            CompanyName = tenant.CompanyName,
             CompanyAddress = tenant.CompanyAddress,
             CreatedAt = tenant.CreatedAt
         };

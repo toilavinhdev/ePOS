@@ -1,0 +1,62 @@
+<app-section-content title="Thông tin thương hiệu" [loading]="(loadingGet | async)!">
+  <form [formGroup]="form" class="epos-section-body flex gap-x-[40px]">
+    <app-upload-image #uploadImageComponent
+                      styleClass="h-[280px] w-[280px]"
+                      (fileChange)="formIsIdle = false"
+                      [src]="form.get('logoUrl')?.value"></app-upload-image>
+
+    <div class="w-full">
+      <div class="grid grid-cols-3 gap-y-5 gap-x-12">
+        <div class="flex flex-col gap-y-1">
+          <label>ID:</label>
+          <input pInputText
+                 formControlName="id"
+                 class="w-full"/>
+        </div>
+        <div class="flex flex-col gap-y-1">
+          <label>Mã thương hiệu:</label>
+          <input pInputText
+                 formControlName="code"
+                 class="w-full"/>
+        </div>
+        <div class="flex flex-col gap-y-1">
+          <label>Tên thương hiệu:</label>
+          <input pInputText
+                 formControlName="name"
+                 class="w-full"/>
+        </div>
+        <div class="flex flex-col gap-y-1">
+          <label>Tên công ty:</label>
+          <input pInputText
+                 formControlName="companyName"
+                 class="w-full"/>
+        </div>
+        <div class="flex flex-col gap-y-1">
+          <label>Địa chỉ công ty:</label>
+          <input pInputText
+                 formControlName="companyAddress"
+                 class="w-full"/>
+        </div>
+        <div class="flex flex-col gap-y-1">
+          <label>Mã số thuế:</label>
+          <input pInputText
+                 formControlName="taxId"
+                 class="w-full"/>
+        </div>
+        <div class="flex flex-col gap-y-1">
+          <label>Ngày đăng ký:</label>
+          <input pInputText
+                 formControlName="createdAt"
+                 class="w-full"/>
+        </div>
+      </div>
+
+      <p-button label="Cập nhật"
+                styleClass="mt-6"
+                (onClick)="onUpdateTenant()"
+                [loading]="(loadingUpdate | async)!"
+                [disabled]="formIsIdle || form.invalid"></p-button>
+    </div>
+  </form>
+
+</app-section-content>

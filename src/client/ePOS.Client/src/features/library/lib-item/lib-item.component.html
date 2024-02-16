@@ -1,1 +1,19 @@
-<p>lib-item works!</p>
+<section class="epos-section-content">
+  <div class="epos-section-header mb-6 flex justify-between items-center">
+    Danh sách món ăn
+    <div class="space-x-2">
+      <p-button label="Tải lên file" size="small" severity="help"></p-button>
+      <p-button label="Thêm mới" size="small"></p-button>
+    </div>
+  </div>
+
+  <app-dynamic-table>
+    <app-column header="STT" columnStyleClass="text-center" headerStyleClass="text-center"></app-column>
+    <app-column header="SKU"></app-column>
+    <app-column header="Tên món ăn"></app-column>
+    <app-column header="Đơn vị"></app-column>
+    <app-column header="Giá bán"></app-column>
+    <app-column header="Trạng thái"></app-column>
+    <app-column header="Tác vụ"></app-column>
+  </app-dynamic-table>
+</section>

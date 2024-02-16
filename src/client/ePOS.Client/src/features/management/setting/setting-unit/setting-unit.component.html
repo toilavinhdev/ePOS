@@ -1,0 +1,47 @@
+<app-section-content title="Danh sách đơn vị"
+                     [customTitle]="customTitle">
+  <ng-template #customTitle>
+    <div class="epos-section-header mb-6 flex justify-between items-center">
+      Danh sách đơn vị
+      <p-button label="Thêm mới"
+                size="small"
+                icon="pi pi-plus"
+                (onClick)="modal.showCreateModal()"></p-button>
+    </div>
+  </ng-template>
+
+  <app-dynamic-table [data]="(records$ | async)!"
+                     [paginator]="(paginator$ | async)!"
+                     (pageChange)="onPageChange($event)">
+    <app-column header="STT"
+                headerStyleClass="text-center w-[40px]"
+                columnStyleClass="text-center"></app-column>
+    <app-column header="Tên đơn vị"
+                key="name"></app-column>
+    <app-column header="Phân loại"
+                key="isDefault">
+      <ng-template appCell let-row>{{ row['isDefault'] ? 'Mặc định' : 'Tạo thủ công' }}</ng-template>
+    </app-column>
+    <app-column header="Số lượng món ăn sử dụng"
+                key="itemCount"
+                headerStyleClass="w-[300px] text-center"
+                columnStyleClass="text-center"></app-column>
+    <app-column header="Tác vụ"
+                headerStyleClass="w-[230px] text-center"
+                columnStyleClass="text-center">
+      <ng-template appCell let-row>
+        <div class="space-x-2">
+          <p-button label="Chỉnh sửa"
+                    size="small"
+                    (onClick)="modal.showUpdateModal(row)"
+                    [disabled]="row['isDefault']"></p-button>
+          <p-button label="Xóa" size="small"
+                    severity="secondary"
+                    [disabled]="row['isDefault']"></p-button>
+        </div>
+      </ng-template>
+    </app-column>
+  </app-dynamic-table>
+</app-section-content>
+
+<app-setting-unit-detail-modal #modal></app-setting-unit-detail-modal>
