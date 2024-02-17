@@ -16,6 +16,13 @@ public class ItemController : ControllerBase
     {
         _mediator = mediator;
     }
+    
+    [HttpGet]
+    [ApplicationPermission]
+    public async Task<IActionResult> Get([FromQuery] GetItemQuery query)
+    {
+        return Ok(await _mediator.Send(query));
+    }
 
     [HttpPost("list")]
     [ApplicationPermission]

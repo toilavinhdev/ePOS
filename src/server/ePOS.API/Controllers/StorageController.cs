@@ -21,7 +21,7 @@ public class StorageController : ControllerBase
         return Ok(await _mediator.Send(command));
     }
     
-    [HttpPost("upload-mutiple")]
+    [HttpPost("upload-multiple")]
     public async Task<IActionResult> Upload([FromForm] UploadFilesCommand command)
     {
         return Ok(await _mediator.Send(command));
