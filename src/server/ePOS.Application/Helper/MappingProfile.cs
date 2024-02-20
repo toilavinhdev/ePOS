@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using ePOS.Application.ViewModels;
+using ePOS.Domain.CategoryAggregate;
 using ePOS.Domain.ItemAggregate;
-using ePOS.Domain.OptionAttributeAggregate;
 using ePOS.Domain.TenantAggregate;
 using ePOS.Domain.ToppingAggregate;
 using ePOS.Domain.UnitAggregate;
@@ -19,5 +19,6 @@ public class MappingProfile : Profile
         CreateMap<ItemImage, ItemImageViewModel>();
         CreateMap<ItemSize, ItemSizePriceViewModel>();
         CreateMap<Topping, ToppingViewModel>().ReverseMap();
+        CreateMap<Category, CategoryViewModel>().ReverseMap();
     }
 }

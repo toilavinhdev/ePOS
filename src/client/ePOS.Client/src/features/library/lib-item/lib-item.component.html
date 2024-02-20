@@ -26,7 +26,16 @@
           <p-image [src]="row['images']?.[0]?.url ?? defaultImagePath"
                    [preview]="true"
                    imageClass="w-[45px] aspect-square"></p-image>
-          <div>{{ row['name'] }}</div>
+          <div class="space-y-2">
+            <ng-container *ngIf="row['itemCategories'].length">
+              <div>
+                <span *ngFor="let category of row['itemCategories']" class="bg-primary rounded text-[12px] font-[500] px-1">
+                  {{ category['name'] }}
+                </span>
+              </div>
+            </ng-container>
+            <div>{{ row['name'] }}</div>
+          </div>
         </div>
       </ng-template>
     </app-column>
