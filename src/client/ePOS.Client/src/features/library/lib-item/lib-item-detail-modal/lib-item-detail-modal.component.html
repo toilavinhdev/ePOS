@@ -1,0 +1,88 @@
+<p-dialog header="{{ currentFormType === FormType.Create ? 'Thêm' : 'Cập nhật' }} món ăn"
+          styleClass="w-[800px] min-h-[500px]"
+          [(visible)]="visible"
+          [modal]="true"
+          [draggable]="false"
+          [resizable]="false">
+  <form [formGroup]="form">
+    <div class="flex flex-col gap-y-1">
+      <label>Tên món ăn:</label>
+      <input pInputText formControlName="name"/>
+    </div>
+    <div class="flex gap-x-5 mt-6">
+      <div class="flex flex-col gap-y-1 w-full">
+        <label>SKU:</label>
+        <input pInputText formControlName="sku"/>
+      </div>
+      <div class="flex flex-col gap-y-1">
+        <label>Đơn vị:</label>
+        <p-dropdown placeholder="Chọn đơn vị"
+                    [options]="(unit$ | async)!"
+                    optionValue="id"
+                    optionLabel="name"
+                    formControlName="unitId"
+                    styleClass="w-[180px]"></p-dropdown>
+      </div>
+    </div>
+
+    <div class="mt-6 {{!sizePrices.length ? 'inline-block' : ''}}">
+      <div *ngIf="!sizePrices.length" class="flex flex-col gap-y-1 w-[240px] mr-4">
+        <label>Giá bán:</label>
+        <p-inputNumber formControlName="price"
+                       styleClass="w-full"
+                       [min]="0"></p-inputNumber>
+      </div>
+      <div *ngIf="sizePrices.length">
+        <ng-container formArrayName="sizePrices">
+          <div *ngFor="let _ of sizePrices.controls; let idx=index"
+               [formGroupName]="idx"
+               class="flex gap-x-3 mt-2">
+            <div class="flex flex-col gap-y-1 w-[240px]">
+              <label>Size:</label>
+              <input pInputText
+                     formControlName="name">
+            </div>
+            <div class="flex flex-col gap-y-1 w-[240px]">
+              <label>Giá bán:</label>
+              <p-inputNumber formControlName="price"
+                             styleClass="w-full"
+                             [min]="0"></p-inputNumber>
+            </div>
+            <div (click)="removeSizePrice(idx)"
+                 class="rounded hover:cursor-pointer hover:bg-[#dbe9f2] p-3 self-end">
+              <i class="fa-solid fa-xmark"></i>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+    <p-button [disabled]="sizePrices.length === 5"
+              (onClick)="addSizePrice()"
+              label="Thêm size ({{sizePrices.length}}/5)"
+              size="small"
+              styleClass="h-[40px] mt-4"></p-button>
+    <p-button *ngIf="sizePrices.length"
+              (onClick)="removeAllSizePrice()"
+              label="Xóa hết size"
+              size="small"
+              severity="secondary"
+              styleClass="h-[40px] mt-4 ml-2"></p-button>
+
+    <div class="mt-6">
+      <app-upload-multiple-image #uploadMultiple></app-upload-multiple-image>
+    </div>
+
+    <div class="flex space-x-2 justify-end mt-4">
+      <p-button label="Hủy"
+                size="small"
+                severity="secondary"
+                (onClick)="onHideModal()"></p-button>
+      <p-button label="Hoàn thành"
+                size="small"
+                [disabled]="form.invalid"
+                (onClick)="onSubmit()"></p-button>
+    </div>
+  </form>
+
+  <pre>{{form.value | json}}</pre>
+</p-dialog>

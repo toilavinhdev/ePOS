@@ -1,1 +1,50 @@
-<p>lib-category works!</p>
+<app-section-content title="Danh sách danh mục" [customTitle]="customTitleTpl">
+  <ng-template #customTitleTpl>
+    <div class="epos-section-header mb-6 flex justify-between items-center">
+      Danh sách danh mục
+      <p-button label="Thêm mới"
+                (onClick)="modal.showModal(FormType.Create)"
+                size="small"
+                icon="pi pi-plus"></p-button>
+    </div>
+  </ng-template>
+
+  <app-dynamic-table [data]="(categories$ | async)!" [paginator]="(paginator$ | async)!">
+    <app-column header="STT"
+                headerStyleClass="text-center w-[60px]"
+                columnStyleClass="text-center"></app-column>
+    <app-column header="Tên"
+                key="name"></app-column>
+    <app-column header="Số lượng món"
+                key="itemCount"
+                headerStyleClass="text-center" c
+                columnStyleClass="text-center"></app-column>
+    <app-column header="Trạng thái"
+                key="isActive"
+                headerStyleClass="w-[220px] text-center"
+                columnStyleClass="text-center">
+      <ng-template appCell let-row>
+        <p-tag [severity]="row['isActive'] ? 'success' : ''"
+               [value]="row['isActive'] ? 'Đang hoạt động' : 'Đã khóa'"></p-tag>
+      </ng-template>
+    </app-column>
+    <app-column header="Tác vụ"
+                headerStyleClass="text-center w-[80px]"
+                columnStyleClass="text-center">
+      <ng-template appCell let-row>
+        <div class="flex gap-2">
+          <p-button icon="pi pi-pencil"
+                    size="small"
+                    (onClick)="modal.showModal(FormType.Update)"
+                    [rounded]="true"></p-button>
+          <p-button icon="pi pi-trash"
+                    size="small"
+                    severity="secondary"
+                    [rounded]="true"></p-button>
+        </div>
+      </ng-template>
+    </app-column>
+  </app-dynamic-table>
+</app-section-content>
+
+<app-lib-category-detail-modal #modal></app-lib-category-detail-modal>

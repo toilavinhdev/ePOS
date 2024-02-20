@@ -91,6 +91,8 @@ public class ListItemQueryHandler : APIRequestHandler<ListItemQuery, ListItemRes
                     .ThenInclude(x => x.OptionAttributeValues)
             .Include(x => x.ItemToppings)!
                 .ThenInclude(x => x.Topping)
+            .Include(x => x.CategoryItems)!
+                .ThenInclude(x => x.Category)
             .Where(whereExpression)
             .ToSortedQuery(sortExpression, sortAsc)
             .ToPagedQuery(request.PageIndex, request.PageSize, out var paginator)
@@ -137,6 +139,13 @@ public class ListItemQueryHandler : APIRequestHandler<ListItemQuery, ListItemRes
                         Price = y.Price,
                         ItemCount = y.ItemToppings?.Count ?? 0
                     }).ToList() ?? new List<ToppingViewModel>(), 
+                ItemCategories = x.CategoryItems?
+                    .Select(y => y.Category)
+                    .Select(y => new ItemCategoryViewModel()
+                    {
+                        Id = y.Id,
+                        Name = y.Name
+                    }).ToList() ?? new List<ItemCategoryViewModel>(),
                 CreatedAt = x.CreatedAt
             }).ToList(),
             Paginator = paginator

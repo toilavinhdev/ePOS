@@ -2,18 +2,87 @@
   <div class="epos-section-header mb-6 flex justify-between items-center">
     Danh sách món ăn
     <div class="space-x-2">
-      <p-button label="Tải lên file" size="small" severity="help"></p-button>
-      <p-button label="Thêm mới" size="small"></p-button>
+      <p-button label="Tải lên file"
+                size="small"
+                icon="pi pi-upload"
+                severity="help"></p-button>
+      <p-button label="Thêm mới"
+                size="small"
+                icon="pi pi-plus"
+                (onClick)="modal.onShowCreateModal()"></p-button>
     </div>
   </div>
 
-  <app-dynamic-table>
-    <app-column header="STT" columnStyleClass="text-center" headerStyleClass="text-center"></app-column>
-    <app-column header="SKU"></app-column>
-    <app-column header="Tên món ăn"></app-column>
-    <app-column header="Đơn vị"></app-column>
-    <app-column header="Giá bán"></app-column>
-    <app-column header="Trạng thái"></app-column>
-    <app-column header="Tác vụ"></app-column>
+  <app-dynamic-table [data]="(item$ | async)!" [paginator]="(paginator$ | async)!">
+    <app-column header="STT"
+                columnStyleClass="text-center w-[40px]"
+                headerStyleClass="text-center"></app-column>
+    <app-column header="SKU"
+                key="sku"
+                headerStyleClass="w-[160px]"></app-column>
+    <app-column header="Tên món ăn">
+      <ng-template appCell let-row>
+        <div class="flex gap-x-6 items-center">
+          <p-image [src]="row['images']?.[0]?.url ?? defaultImagePath"
+                   [preview]="true"
+                   imageClass="w-[45px] aspect-square"></p-image>
+          <div class="space-y-2">
+            <ng-container *ngIf="row['itemCategories'].length">
+              <div>
+                <span *ngFor="let category of row['itemCategories']" class="bg-primary rounded text-[12px] font-[500] px-1">
+                  {{ category['name'] }}
+                </span>
+              </div>
+            </ng-container>
+            <div>{{ row['name'] }}</div>
+          </div>
+        </div>
+      </ng-template>
+    </app-column>
+    <app-column header="Đơn vị"
+                key="unitName"></app-column>
+    <app-column header="Giá bán"
+                headerStyleClass="w-[180px] text-center"
+                columnStyleClass="text-center">
+      <ng-template appCell let-row>
+        @if (row['sizePrices'].length > 0) {
+          <div class="grid grid-cols-4 gap-x-1">
+            @for (sizePrice of row['sizePrices']; track sizePrice) {
+              <span>{{sizePrice['name']}}:</span>
+              <span class="col-span-3 text-right pr-3">{{ sizePrice['price'] | number:'1.0-0' }} ₫</span>
+            }
+          </div>
+        } @else {
+          <div class="text-right">{{ row['price'] | number:'1.0-0' }} ₫</div>
+        }
+      </ng-template>
+    </app-column>
+    <app-column header="Trạng thái"
+                key="isActive"
+                headerStyleClass="w-[220px] text-center"
+                columnStyleClass="text-center">
+      <ng-template appCell let-row>
+        <p-tag [severity]="row['isActive'] ? 'success' : ''"
+               [value]="row['isActive'] ? 'Đang hoạt động' : 'Đã khóa'"></p-tag>
+      </ng-template>
+    </app-column>
+    <app-column header="Tác vụ"
+                headerStyleClass="text-center w-[80px]"
+                columnStyleClass="text-center">
+      <ng-template appCell let-row>
+        <div class="flex gap-2">
+          <p-button icon="pi pi-pencil"
+                    size="small"
+                    (onClick)="modal.onShowUpdateModal(row)"
+                    [rounded]="true"></p-button>
+          <p-button icon="pi pi-trash"
+                    size="small"
+                    severity="secondary"
+                    [rounded]="true"></p-button>
+        </div>
+      </ng-template>
+    </app-column>
   </app-dynamic-table>
 </section>
+
+<app-lib-item-detail-modal #modal></app-lib-item-detail-modal>

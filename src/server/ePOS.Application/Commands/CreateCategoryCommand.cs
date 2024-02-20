@@ -1,5 +1,7 @@
-﻿using ePOS.Application.Common.Contracts;
+﻿using AutoMapper;
+using ePOS.Application.Common.Contracts;
 using ePOS.Application.Common.Mediator;
+using ePOS.Application.ViewModels;
 using ePOS.Domain.CategoryAggregate;
 using ePOS.Domain.ItemAggregate;
 using ePOS.Shared.Exceptions;
@@ -9,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ePOS.Application.Commands;
 
-public class CreateCategoryCommand : IAPIRequest
+public class CreateCategoryCommand : IAPIRequest<CategoryViewModel>
 {
     public string Name { get; set; } = default!;
     
@@ -24,16 +26,18 @@ public class CreateCategoryCommandValidator : AbstractValidator<CreateCategoryCo
     }
 }
 
-public class CreateCategoryCommandHandler : APIRequestHandler<CreateCategoryCommand>
+public class CreateCategoryCommandHandler : APIRequestHandler<CreateCategoryCommand, CategoryViewModel>
 {
     private readonly ITenantContext _context;
+    private readonly IMapper _mapper;
     
-    public CreateCategoryCommandHandler(IUserService userService, ITenantContext context) : base(userService)
+    public CreateCategoryCommandHandler(IUserService userService, ITenantContext context, IMapper mapper) : base(userService)
     {
         _context = context;
+        _mapper = mapper;
     }
 
-    public override async Task<APIResponse> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
+    public override async Task<APIResponse<CategoryViewModel>> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
     {
         var category = new Category()
         {
@@ -56,7 +60,8 @@ public class CreateCategoryCommandHandler : APIRequestHandler<CreateCategoryComm
                 categoryItems.Add(new CategoryItem()
                 {
                     CategoryId = category.Id,
-                    ItemId = itemId
+                    ItemId = itemId,
+                    TenantId = UserClaimsValue.TenantId
                 });
             }
             await _context.CategoryItems.AddRangeAsync(categoryItems, cancellationToken);
@@ -64,6 +69,8 @@ public class CreateCategoryCommandHandler : APIRequestHandler<CreateCategoryComm
 
         await _context.SaveChangesAsync(cancellationToken);
 
-        return new APIResponse().IsSuccess("Tạo danh mục thành công");
+        var data = _mapper.Map<CategoryViewModel>(category);
+
+        return new APIResponse<CategoryViewModel>().IsSuccess(data, "Tạo danh mục thành công");
     }
 }

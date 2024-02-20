@@ -24,6 +24,8 @@ public class ItemViewModel
     
     public List<ToppingViewModel>? Toppings { get; set; }
     
+    public List<ItemCategoryViewModel>? ItemCategories { get; set; }
+    
     public DateTimeOffset CreatedAt { get; set; }
 }
 
@@ -39,4 +41,11 @@ public class ItemSizePriceViewModel
     public string Name { get; set; } = default!;
     
     public double Price { get; set; }
+}
+
+public class ItemCategoryViewModel
+{
+    public Guid Id { get; set; }
+
+    public string Name { get; set; } = default!;
 }

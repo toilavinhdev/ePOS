@@ -78,6 +78,7 @@ export class SettingUnitComponent extends BaseComponent implements OnInit {
       )
       .subscribe(() => {
         this.unitModal.hideModal();
+        this.loadData();
       });
   }
 

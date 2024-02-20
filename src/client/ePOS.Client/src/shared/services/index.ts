@@ -5,3 +5,4 @@ export * from './storage.service';
 export * from './tenant.service';
 export * from './item.service';
 export * from './unit.service';
+export * from './category.service';

@@ -31,12 +31,15 @@
                 columnStyleClass="text-center">
       <ng-template appCell let-row>
         <div class="space-x-2">
-          <p-button label="Chỉnh sửa"
+          <p-button icon="pi pi-pencil"
                     size="small"
+                    [rounded]="true"
                     (onClick)="modal.showUpdateModal(row)"
                     [disabled]="row['isDefault']"></p-button>
-          <p-button label="Xóa" size="small"
+          <p-button icon="pi pi-trash"
+                    size="small"
                     severity="secondary"
+                    [rounded]="true"
                     [disabled]="row['isDefault']"></p-button>
         </div>
       </ng-template>

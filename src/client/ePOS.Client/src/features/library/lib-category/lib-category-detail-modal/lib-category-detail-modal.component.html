@@ -1,0 +1,30 @@
+<p-dialog header="{{ formType === FormType.Create ? 'Thêm' : 'Cập nhật' }} danh mục" styleClass="w-[500px] min-h-[500px]"
+          [(visible)]="visible" [modal]="true" [draggable]="false" [resizable]="false">
+  <form [formGroup]="form">
+    <div>
+      <div class="flex flex-col gap-y-2">
+        <label>Tên danh mục:</label>
+        <input pInputText formControlName="name"/>
+      </div>
+      <div class="flex flex-col gap-y-2 mt-4">
+        <label>Sản phẩm:</label>
+        <p-multiSelect [options]="(items$ | async)!"
+                       formControlName="itemIds"
+                       optionLabel="name"
+                       optionValue="id"
+                       display="chip"
+                       [showClear]="true" panelStyleClass="w-full" styleClass="w-full z-[80]"></p-multiSelect>
+      </div>
+    </div>
+    <div class="flex space-x-2 justify-end mt-[260px]">
+      <p-button label="Hủy"
+                size="small"
+                (onClick)="hideModal()"
+                severity="secondary"></p-button>
+      <p-button label="Hoàn thành"
+                [disabled]="form.invalid"
+                (onClick)="onSubmit()"
+                size="small"></p-button>
+    </div>
+  </form>
+</p-dialog>

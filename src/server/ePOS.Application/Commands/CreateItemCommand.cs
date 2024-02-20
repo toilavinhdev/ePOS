@@ -66,7 +66,7 @@ public class CreateItemCommandHandler : APIRequestHandler<CreateItemCommand>
             IsActive = true,
             Sku = request.Sku,
             UnitId = request.UnitId,
-            Price = request.Price ?? 0,
+            Price = (request.SizePrices is not null && request.SizePrices.Count > 0) ? 0 : request.Price ?? 0,
         };
         item.SetCreationTracking(UserClaimsValue);
         await _context.Items.AddAsync(item, cancellationToken);

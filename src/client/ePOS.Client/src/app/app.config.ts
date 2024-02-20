@@ -12,6 +12,8 @@ import { UserEffects, userReducer } from '@app-shared/store/user';
 import { TenantEffects, tenantReducer } from '@app-shared/store/tenant';
 import { UnitEffects, unitReducer } from '@app-shared/store/unit';
 import { StorageEffects, storageReducer } from '@app-shared/store/storage';
+import { ItemEffects, itemReducer } from '@app-shared/store/item';
+import { CategoryEffects, categoryReducer } from '@app-shared/store/category';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -23,8 +25,17 @@ export const appConfig: ApplicationConfig = {
       feature_tenant: tenantReducer,
       feature_unit: unitReducer,
       feature_storage: storageReducer,
+      feature_item: itemReducer,
+      feature_category: categoryReducer,
     }),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
-    provideEffects([UserEffects, TenantEffects, UnitEffects, StorageEffects]),
+    provideEffects([
+      UserEffects,
+      TenantEffects,
+      UnitEffects,
+      StorageEffects,
+      ItemEffects,
+      CategoryEffects,
+    ]),
   ],
 };
