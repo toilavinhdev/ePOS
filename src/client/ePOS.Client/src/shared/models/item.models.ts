@@ -1,5 +1,3 @@
-import { IOptionAttributeViewModel } from '@app-shared/models/option-attribute.models';
-import { IToppingViewModel } from '@app-shared/models/topping.models';
 import { IPaginator } from '@app-shared/core/models/common.models';
 
 export interface IItemViewModel {
@@ -12,8 +10,6 @@ export interface IItemViewModel {
   unitId: string;
   unitName: string;
   images?: IItemImageViewModel[];
-  optionAttributes?: IOptionAttributeViewModel[];
-  toppings?: IToppingViewModel[];
   createdAt: Date;
 }
 
@@ -47,7 +43,5 @@ export interface ICreateItemRequest {
   price?: number;
   unitId: number;
   imagesUrls?: string[];
-  toppingIds?: string[];
-  optionAttributeIds?: string[];
   sizePrices?: IItemSizePriceViewModel[];
 }

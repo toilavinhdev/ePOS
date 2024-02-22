@@ -1,5 +1,5 @@
-﻿using ePOS.Application.Commands.User;
-using ePOS.Application.Queries.User;
+﻿using ePOS.Application.Commands;
+using ePOS.Application.Queries;
 using ePOS.Infrastructure.Identity.Authorization;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

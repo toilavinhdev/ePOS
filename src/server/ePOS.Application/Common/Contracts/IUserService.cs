@@ -1,5 +1,5 @@
-﻿using ePOS.Application.Commands.User;
-using ePOS.Application.Queries.User;
+﻿using ePOS.Application.Commands;
+using ePOS.Application.Queries;
 using ePOS.Shared.ValueObjects;
 
 namespace ePOS.Application.Common.Contracts;

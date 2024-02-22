@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ePOS.Infrastructure.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class AddTenantLibraryItemEntities : Migration
+    public partial class InitialDatabaseEntity : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -33,28 +33,13 @@ namespace ePOS.Infrastructure.Persistence.Migrations
                 name: "Sequence_ItemImage");
 
             migrationBuilder.CreateSequence<int>(
-                name: "Sequence_ItemOptionAttribute");
-
-            migrationBuilder.CreateSequence<int>(
                 name: "Sequence_ItemSize");
 
             migrationBuilder.CreateSequence<int>(
                 name: "Sequence_ItemTax");
 
             migrationBuilder.CreateSequence<int>(
-                name: "Sequence_ItemTopping");
-
-            migrationBuilder.CreateSequence<int>(
-                name: "Sequence_OptionAttribute");
-
-            migrationBuilder.CreateSequence<int>(
-                name: "Sequence_OptionAttributeValue");
-
-            migrationBuilder.CreateSequence<int>(
                 name: "Sequence_TenantTax");
-
-            migrationBuilder.CreateSequence<int>(
-                name: "Sequence_Topping");
 
             migrationBuilder.CreateSequence<int>(
                 name: "Sequence_Unit");
@@ -158,26 +143,6 @@ namespace ePOS.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "OptionAttributes",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    SortIndex = table.Column<int>(type: "int", nullable: false),
-                    TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    SubId = table.Column<long>(type: "bigint", nullable: false, defaultValueSql: "NEXT VALUE FOR Sequence_OptionAttribute"),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    ModifiedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    ModifiedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_OptionAttributes", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Tenants",
                 columns: table => new
                 {
@@ -194,25 +159,6 @@ namespace ePOS.Infrastructure.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Tenants", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Toppings",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    SubId = table.Column<long>(type: "bigint", nullable: false, defaultValueSql: "NEXT VALUE FOR Sequence_Topping"),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    ModifiedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    ModifiedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Toppings", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -342,27 +288,6 @@ namespace ePOS.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "OptionAttributeValues",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    OptionAttributeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    SubId = table.Column<long>(type: "bigint", nullable: false, defaultValueSql: "NEXT VALUE FOR Sequence_OptionAttributeValue")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_OptionAttributeValues", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_OptionAttributeValues_OptionAttributes_OptionAttributeId",
-                        column: x => x.OptionAttributeId,
-                        principalTable: "OptionAttributes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "TenantTaxes",
                 columns: table => new
                 {
@@ -466,39 +391,13 @@ namespace ePOS.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ItemOptionAttributes",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    OptionAttributeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    SubId = table.Column<long>(type: "bigint", nullable: false, defaultValueSql: "NEXT VALUE FOR Sequence_ItemOptionAttribute")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ItemOptionAttributes", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ItemOptionAttributes_Items_ItemId",
-                        column: x => x.ItemId,
-                        principalTable: "Items",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ItemOptionAttributes_OptionAttributes_OptionAttributeId",
-                        column: x => x.OptionAttributeId,
-                        principalTable: "OptionAttributes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ItemSizes",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<double>(type: "float", nullable: false),
+                    SortIndex = table.Column<int>(type: "int", nullable: false),
                     ItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     SubId = table.Column<long>(type: "bigint", nullable: false, defaultValueSql: "NEXT VALUE FOR Sequence_ItemSize"),
@@ -540,33 +439,6 @@ namespace ePOS.Infrastructure.Persistence.Migrations
                         name: "FK_ItemTaxes_Items_ItemId",
                         column: x => x.ItemId,
                         principalTable: "Items",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ItemToppings",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ToppingId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    SubId = table.Column<long>(type: "bigint", nullable: false, defaultValueSql: "NEXT VALUE FOR Sequence_ItemTopping")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ItemToppings", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ItemToppings_Items_ItemId",
-                        column: x => x.ItemId,
-                        principalTable: "Items",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ItemToppings_Toppings_ToppingId",
-                        column: x => x.ToppingId,
-                        principalTable: "Toppings",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -656,21 +528,6 @@ namespace ePOS.Infrastructure.Persistence.Migrations
                 column: "SubId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ItemOptionAttributes_ItemId",
-                table: "ItemOptionAttributes",
-                column: "ItemId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ItemOptionAttributes_OptionAttributeId",
-                table: "ItemOptionAttributes",
-                column: "OptionAttributeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ItemOptionAttributes_SubId",
-                table: "ItemOptionAttributes",
-                column: "SubId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Items_Sku",
                 table: "Items",
                 column: "Sku");
@@ -707,36 +564,6 @@ namespace ePOS.Infrastructure.Persistence.Migrations
                 column: "SubId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ItemToppings_ItemId",
-                table: "ItemToppings",
-                column: "ItemId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ItemToppings_SubId",
-                table: "ItemToppings",
-                column: "SubId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ItemToppings_ToppingId",
-                table: "ItemToppings",
-                column: "ToppingId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_OptionAttributes_SubId",
-                table: "OptionAttributes",
-                column: "SubId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_OptionAttributeValues_OptionAttributeId",
-                table: "OptionAttributeValues",
-                column: "OptionAttributeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_OptionAttributeValues_SubId",
-                table: "OptionAttributeValues",
-                column: "SubId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Tenants_Code",
                 table: "Tenants",
                 column: "Code");
@@ -751,11 +578,6 @@ namespace ePOS.Infrastructure.Persistence.Migrations
                 table: "TenantTaxes",
                 column: "TenantId",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Toppings_SubId",
-                table: "Toppings",
-                column: "SubId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Units_SubId",
@@ -791,19 +613,10 @@ namespace ePOS.Infrastructure.Persistence.Migrations
                 name: "ItemImages");
 
             migrationBuilder.DropTable(
-                name: "ItemOptionAttributes");
-
-            migrationBuilder.DropTable(
                 name: "ItemSizes");
 
             migrationBuilder.DropTable(
                 name: "ItemTaxes");
-
-            migrationBuilder.DropTable(
-                name: "ItemToppings");
-
-            migrationBuilder.DropTable(
-                name: "OptionAttributeValues");
 
             migrationBuilder.DropTable(
                 name: "TenantTaxes");
@@ -819,12 +632,6 @@ namespace ePOS.Infrastructure.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "Items");
-
-            migrationBuilder.DropTable(
-                name: "Toppings");
-
-            migrationBuilder.DropTable(
-                name: "OptionAttributes");
 
             migrationBuilder.DropTable(
                 name: "Tenants");
@@ -854,28 +661,13 @@ namespace ePOS.Infrastructure.Persistence.Migrations
                 name: "Sequence_ItemImage");
 
             migrationBuilder.DropSequence(
-                name: "Sequence_ItemOptionAttribute");
-
-            migrationBuilder.DropSequence(
                 name: "Sequence_ItemSize");
 
             migrationBuilder.DropSequence(
                 name: "Sequence_ItemTax");
 
             migrationBuilder.DropSequence(
-                name: "Sequence_ItemTopping");
-
-            migrationBuilder.DropSequence(
-                name: "Sequence_OptionAttribute");
-
-            migrationBuilder.DropSequence(
-                name: "Sequence_OptionAttributeValue");
-
-            migrationBuilder.DropSequence(
                 name: "Sequence_TenantTax");
-
-            migrationBuilder.DropSequence(
-                name: "Sequence_Topping");
 
             migrationBuilder.DropSequence(
                 name: "Sequence_Unit");

@@ -25,9 +25,5 @@ public class Item : AuditableEntity, IAggregateRoot
     
     public List<ItemSize>? ItemSizes { get; set; }
     
-    public List<ItemOptionAttribute>? ItemOptionAttributes { get; set; }
-    
-    public List<ItemTopping>? ItemToppings { get; set; }
-    
     public List<CategoryItem>? CategoryItems { get; set; }
 }

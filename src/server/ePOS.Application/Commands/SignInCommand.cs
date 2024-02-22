@@ -3,7 +3,7 @@ using ePOS.Application.Common.Mediator;
 using ePOS.Shared.ValueObjects;
 using FluentValidation;
 
-namespace ePOS.Application.Commands.User;
+namespace ePOS.Application.Commands;
 
 public class SignInCommand : IAPIRequest<SignInResponse>
 {

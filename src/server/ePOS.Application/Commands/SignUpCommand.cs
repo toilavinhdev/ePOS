@@ -7,7 +7,7 @@ using ePOS.Shared.ValueObjects;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
-namespace ePOS.Application.Commands.User;
+namespace ePOS.Application.Commands;
 
 public class SignUpCommand : IAPIRequest<SignUpResponse>
 {

@@ -4,7 +4,7 @@ using ePOS.Shared.Utilities;
 using ePOS.Shared.ValueObjects;
 using FluentValidation;
 
-namespace ePOS.Application.Commands.User;
+namespace ePOS.Application.Commands;
 
 public class ChangePasswordCommand : IAPIRequest
 {
