@@ -86,13 +86,6 @@ public class ListItemQueryHandler : APIRequestHandler<ListItemQuery, ListItemRes
             .Include(x => x.ItemImages)
             .Include(x => x.Unit)
             .Include(x => x.ItemSizes)
-            .Include(x => x.ItemOptionAttributes)!
-                .ThenInclude(x => x.OptionAttribute)
-                    .ThenInclude(x => x.OptionAttributeValues)
-            .Include(x => x.ItemToppings)!
-                .ThenInclude(x => x.Topping)
-            .Include(x => x.CategoryItems)!
-                .ThenInclude(x => x.Category)
             .Where(whereExpression)
             .ToSortedQuery(sortExpression, sortAsc)
             .ToPagedQuery(request.PageIndex, request.PageSize, out var paginator)
@@ -111,6 +104,7 @@ public class ListItemQueryHandler : APIRequestHandler<ListItemQuery, ListItemRes
                 {
                     Name = y.Name,
                     Price = y.Price,
+                    SortIndex = y.SortIndex
                 }).ToList() ?? new List<ItemSizePriceViewModel>(),
                 UnitId = x.UnitId,
                 UnitName = x.Unit.Name,
@@ -119,26 +113,6 @@ public class ListItemQueryHandler : APIRequestHandler<ListItemQuery, ListItemRes
                     SortIndex = y.SortIndex,
                     Url = y.Url
                 }).ToList(),
-                OptionAttributes = x.ItemOptionAttributes?
-                    .Select(y => y.OptionAttribute)
-                    .Select(y => new OptionAttributeViewModel()
-                    {
-                        Id = y.Id,
-                        Name = y.Name,
-                        IsActive = y.IsActive,
-                        ItemCount = y.ItemOptionAttributes?.Count ?? 0,
-                        Attributes = y.OptionAttributeValues.Select(z => z.Name).ToArray()
-                    }).ToList() ?? new List<OptionAttributeViewModel>(),
-                Toppings = x.ItemToppings?
-                    .Select(y => y.Topping)
-                    .Select(y => new ToppingViewModel()
-                    {
-                        Id = y.Id,
-                        Name = y.Name,
-                        IsActive = y.IsActive,
-                        Price = y.Price,
-                        ItemCount = y.ItemToppings?.Count ?? 0
-                    }).ToList() ?? new List<ToppingViewModel>(), 
                 ItemCategories = x.CategoryItems?
                     .Select(y => y.Category)
                     .Select(y => new ItemCategoryViewModel()

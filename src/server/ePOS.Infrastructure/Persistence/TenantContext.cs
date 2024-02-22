@@ -3,9 +3,7 @@ using ePOS.Application.Common.Contracts;
 using ePOS.Domain.CategoryAggregate;
 using ePOS.Domain.FileAggregate;
 using ePOS.Domain.ItemAggregate;
-using ePOS.Domain.OptionAttributeAggregate;
 using ePOS.Domain.TenantAggregate;
-using ePOS.Domain.ToppingAggregate;
 using ePOS.Domain.UnitAggregate;
 using ePOS.Infrastructure.Identity.Aggregate;
 using ePOS.Shared.ValueObjects;
@@ -22,20 +20,15 @@ public class TenantContext : IdentityDbContext<ApplicationUser, ApplicationRole,
     public TenantContext(DbContextOptions<TenantContext> options) : base(options) { }
 
     public DbSet<ApplicationFile> Files { get; set; } = default!;
-    public DbSet<Tenant> Tenants { get; set; }
-    public DbSet<TenantTax> TenantTaxes { get; set; }
-    public DbSet<Unit> Units { get; set; }
-    public DbSet<Category> Categories { get; set; }
-    public DbSet<CategoryItem> CategoryItems { get; set; }
-    public DbSet<Item> Items { get; set; }
-    public DbSet<ItemImage> ItemImages { get; set; }
-    public DbSet<ItemOptionAttribute> ItemOptionAttributes { get; set; }
-    public DbSet<ItemSize> ItemSizes { get; set; }
-    public DbSet<ItemTax> ItemTaxes { get; set; }
-    public DbSet<ItemTopping> ItemToppings { get; set; }
-    public DbSet<OptionAttribute> OptionAttributes { get; set; }
-    public DbSet<OptionAttributeValue> OptionAttributeValues { get; set; }
-    public DbSet<Topping> Toppings { get; set; }
+    public DbSet<Tenant> Tenants { get; set; } = default!;
+    public DbSet<TenantTax> TenantTaxes { get; set; } = default!;
+    public DbSet<Unit> Units { get; set; } = default!;
+    public DbSet<Category> Categories { get; set; } = default!;
+    public DbSet<CategoryItem> CategoryItems { get; set; } = default!;
+    public DbSet<Item> Items { get; set; } = default!;
+    public DbSet<ItemImage> ItemImages { get; set; } = default!;
+    public DbSet<ItemSize> ItemSizes { get; set; } = default!;
+    public DbSet<ItemTax> ItemTaxes { get; set; } = default!;
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -51,13 +44,8 @@ public class TenantContext : IdentityDbContext<ApplicationUser, ApplicationRole,
         ModelCreating<CategoryItem>(builder);
         ModelCreating<Item>(builder, entityBuilder => entityBuilder.HasIndex(x => x.Sku));
         ModelCreating<ItemImage>(builder);
-        ModelCreating<ItemOptionAttribute>(builder);
         ModelCreating<ItemSize>(builder);
         ModelCreating<ItemTax>(builder);
-        ModelCreating<ItemTopping>(builder);
-        ModelCreating<OptionAttribute>(builder);
-        ModelCreating<OptionAttributeValue>(builder);
-        ModelCreating<Topping>(builder);
     }
     
     private static void ModelCreating<T>(ModelBuilder builder) where T : class, IEntity

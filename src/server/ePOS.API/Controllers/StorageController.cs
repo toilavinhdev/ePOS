@@ -1,4 +1,4 @@
-﻿using ePOS.Application.Commands.Storage;
+﻿using ePOS.Application.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

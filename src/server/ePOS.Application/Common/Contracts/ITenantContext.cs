@@ -1,9 +1,7 @@
 ﻿using ePOS.Domain.CategoryAggregate;
 using ePOS.Domain.FileAggregate;
 using ePOS.Domain.ItemAggregate;
-using ePOS.Domain.OptionAttributeAggregate;
 using ePOS.Domain.TenantAggregate;
-using ePOS.Domain.ToppingAggregate;
 using ePOS.Domain.UnitAggregate;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,11 +18,6 @@ public interface ITenantContext
     DbSet<CategoryItem> CategoryItems { get; set; }
     DbSet<Item> Items { get; set; }
     DbSet<ItemImage> ItemImages { get; set; }
-    DbSet<ItemOptionAttribute> ItemOptionAttributes { get; set; }
     DbSet<ItemSize> ItemSizes { get; set; }
     DbSet<ItemTax> ItemTaxes { get; set; }
-    DbSet<ItemTopping> ItemToppings { get; set; }
-    DbSet<OptionAttribute> OptionAttributes { get; set; }
-    DbSet<OptionAttributeValue> OptionAttributeValues { get; set; }
-    DbSet<Topping> Toppings { get; set; }
 }

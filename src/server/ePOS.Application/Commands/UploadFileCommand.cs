@@ -5,7 +5,7 @@ using ePOS.Shared.ValueObjects;
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
 
-namespace ePOS.Application.Commands.Storage;
+namespace ePOS.Application.Commands;
 
 public class UploadFileCommand : IAPIRequest<string>
 {

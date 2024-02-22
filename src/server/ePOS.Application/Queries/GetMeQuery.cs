@@ -2,7 +2,7 @@
 using ePOS.Application.Common.Mediator;
 using ePOS.Shared.ValueObjects;
 
-namespace ePOS.Application.Queries.User;
+namespace ePOS.Application.Queries;
 
 public class GetMeQuery : IAPIRequest<GetMeResponse>
 {

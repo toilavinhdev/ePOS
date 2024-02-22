@@ -12,8 +12,8 @@ using ePOS.Infrastructure.Persistence;
 namespace ePOS.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(TenantContext))]
-    [Migration("20240209093705_AddTenantLibraryItemEntities")]
-    partial class AddTenantLibraryItemEntities
+    [Migration("20240222082042_InitialDatabaseEntity")]
+    partial class InitialDatabaseEntity
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -39,21 +39,11 @@ namespace ePOS.Infrastructure.Persistence.Migrations
 
             modelBuilder.HasSequence<int>("Sequence_ItemImage");
 
-            modelBuilder.HasSequence<int>("Sequence_ItemOptionAttribute");
-
             modelBuilder.HasSequence<int>("Sequence_ItemSize");
 
             modelBuilder.HasSequence<int>("Sequence_ItemTax");
 
-            modelBuilder.HasSequence<int>("Sequence_ItemTopping");
-
-            modelBuilder.HasSequence<int>("Sequence_OptionAttribute");
-
-            modelBuilder.HasSequence<int>("Sequence_OptionAttributeValue");
-
             modelBuilder.HasSequence<int>("Sequence_TenantTax");
-
-            modelBuilder.HasSequence<int>("Sequence_Topping");
 
             modelBuilder.HasSequence<int>("Sequence_Unit");
 
@@ -267,37 +257,6 @@ namespace ePOS.Infrastructure.Persistence.Migrations
                     b.ToTable("ItemImages");
                 });
 
-            modelBuilder.Entity("ePOS.Domain.ItemAggregate.ItemOptionAttribute", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ItemId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("OptionAttributeId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<long>("SubId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasDefaultValueSql("NEXT VALUE FOR Sequence_ItemOptionAttribute");
-
-                    b.Property<Guid>("TenantId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ItemId");
-
-                    b.HasIndex("OptionAttributeId");
-
-                    b.HasIndex("SubId");
-
-                    b.ToTable("ItemOptionAttributes");
-                });
-
             modelBuilder.Entity("ePOS.Domain.ItemAggregate.ItemSize", b =>
                 {
                     b.Property<Guid>("Id")
@@ -325,6 +284,9 @@ namespace ePOS.Infrastructure.Persistence.Migrations
 
                     b.Property<double>("Price")
                         .HasColumnType("float");
+
+                    b.Property<int>("SortIndex")
+                        .HasColumnType("int");
 
                     b.Property<long>("SubId")
                         .ValueGeneratedOnAdd()
@@ -386,110 +348,6 @@ namespace ePOS.Infrastructure.Persistence.Migrations
                     b.HasIndex("SubId");
 
                     b.ToTable("ItemTaxes");
-                });
-
-            modelBuilder.Entity("ePOS.Domain.ItemAggregate.ItemTopping", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ItemId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<long>("SubId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasDefaultValueSql("NEXT VALUE FOR Sequence_ItemTopping");
-
-                    b.Property<Guid>("TenantId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ToppingId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ItemId");
-
-                    b.HasIndex("SubId");
-
-                    b.HasIndex("ToppingId");
-
-                    b.ToTable("ItemToppings");
-                });
-
-            modelBuilder.Entity("ePOS.Domain.OptionAttributeAggregate.OptionAttribute", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTimeOffset>("CreatedAt")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<Guid?>("CreatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset?>("ModifiedAt")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("SortIndex")
-                        .HasColumnType("int");
-
-                    b.Property<long>("SubId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasDefaultValueSql("NEXT VALUE FOR Sequence_OptionAttribute");
-
-                    b.Property<Guid>("TenantId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SubId");
-
-                    b.ToTable("OptionAttributes");
-                });
-
-            modelBuilder.Entity("ePOS.Domain.OptionAttributeAggregate.OptionAttributeValue", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("OptionAttributeId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<long>("SubId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasDefaultValueSql("NEXT VALUE FOR Sequence_OptionAttributeValue");
-
-                    b.Property<Guid>("TenantId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OptionAttributeId");
-
-                    b.HasIndex("SubId");
-
-                    b.ToTable("OptionAttributeValues");
                 });
 
             modelBuilder.Entity("ePOS.Domain.TenantAggregate.Tenant", b =>
@@ -574,46 +432,6 @@ namespace ePOS.Infrastructure.Persistence.Migrations
                         .IsUnique();
 
                     b.ToTable("TenantTaxes");
-                });
-
-            modelBuilder.Entity("ePOS.Domain.ToppingAggregate.Topping", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTimeOffset>("CreatedAt")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<Guid?>("CreatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset?>("ModifiedAt")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<long>("SubId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasDefaultValueSql("NEXT VALUE FOR Sequence_Topping");
-
-                    b.Property<Guid>("TenantId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SubId");
-
-                    b.ToTable("Toppings");
                 });
 
             modelBuilder.Entity("ePOS.Domain.UnitAggregate.Unit", b =>
@@ -962,25 +780,6 @@ namespace ePOS.Infrastructure.Persistence.Migrations
                     b.Navigation("Item");
                 });
 
-            modelBuilder.Entity("ePOS.Domain.ItemAggregate.ItemOptionAttribute", b =>
-                {
-                    b.HasOne("ePOS.Domain.ItemAggregate.Item", "Item")
-                        .WithMany("ItemOptionAttributes")
-                        .HasForeignKey("ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ePOS.Domain.OptionAttributeAggregate.OptionAttribute", "OptionAttribute")
-                        .WithMany("ItemOptionAttributes")
-                        .HasForeignKey("OptionAttributeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Item");
-
-                    b.Navigation("OptionAttribute");
-                });
-
             modelBuilder.Entity("ePOS.Domain.ItemAggregate.ItemSize", b =>
                 {
                     b.HasOne("ePOS.Domain.ItemAggregate.Item", "Item")
@@ -1001,36 +800,6 @@ namespace ePOS.Infrastructure.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("Item");
-                });
-
-            modelBuilder.Entity("ePOS.Domain.ItemAggregate.ItemTopping", b =>
-                {
-                    b.HasOne("ePOS.Domain.ItemAggregate.Item", "Item")
-                        .WithMany("ItemToppings")
-                        .HasForeignKey("ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ePOS.Domain.ToppingAggregate.Topping", "Topping")
-                        .WithMany("ItemToppings")
-                        .HasForeignKey("ToppingId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Item");
-
-                    b.Navigation("Topping");
-                });
-
-            modelBuilder.Entity("ePOS.Domain.OptionAttributeAggregate.OptionAttributeValue", b =>
-                {
-                    b.HasOne("ePOS.Domain.OptionAttributeAggregate.OptionAttribute", "OptionAttribute")
-                        .WithMany("OptionAttributeValues")
-                        .HasForeignKey("OptionAttributeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("OptionAttribute");
                 });
 
             modelBuilder.Entity("ePOS.Domain.TenantAggregate.TenantTax", b =>
@@ -1118,31 +887,15 @@ namespace ePOS.Infrastructure.Persistence.Migrations
 
                     b.Navigation("ItemImages");
 
-                    b.Navigation("ItemOptionAttributes");
-
                     b.Navigation("ItemSizes");
 
                     b.Navigation("ItemTax");
-
-                    b.Navigation("ItemToppings");
-                });
-
-            modelBuilder.Entity("ePOS.Domain.OptionAttributeAggregate.OptionAttribute", b =>
-                {
-                    b.Navigation("ItemOptionAttributes");
-
-                    b.Navigation("OptionAttributeValues");
                 });
 
             modelBuilder.Entity("ePOS.Domain.TenantAggregate.Tenant", b =>
                 {
                     b.Navigation("TenantTax")
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("ePOS.Domain.ToppingAggregate.Topping", b =>
-                {
-                    b.Navigation("ItemToppings");
                 });
 
             modelBuilder.Entity("ePOS.Domain.UnitAggregate.Unit", b =>

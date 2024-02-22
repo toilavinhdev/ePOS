@@ -20,10 +20,6 @@ public class ItemViewModel
     
     public List<ItemImageViewModel>? Images { get; set; } 
     
-    public List<OptionAttributeViewModel>? OptionAttributes { get; set; }
-    
-    public List<ToppingViewModel>? Toppings { get; set; }
-    
     public List<ItemCategoryViewModel>? ItemCategories { get; set; }
     
     public DateTimeOffset CreatedAt { get; set; }
@@ -41,6 +37,8 @@ public class ItemSizePriceViewModel
     public string Name { get; set; } = default!;
     
     public double Price { get; set; }
+
+    public int SortIndex { get; set; }
 }
 
 public class ItemCategoryViewModel
