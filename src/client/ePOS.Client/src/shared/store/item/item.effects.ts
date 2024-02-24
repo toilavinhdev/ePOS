@@ -5,6 +5,9 @@ import {
   createItem,
   createItemFailed,
   createItemSuccess,
+  deleteItem,
+  deleteItemFailed,
+  deleteItemSuccess,
   listItem,
   listItemFailed,
   listItemSuccess,
@@ -31,13 +34,15 @@ export class ItemEffects {
     ),
   );
 
-  listItemFailed$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(listItemFailed),
-      tap(() =>
-        this.notificationService.error('Lấy danh sách món ăn thất bại'),
+  listItemFailed$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(listItemFailed),
+        tap(() =>
+          this.notificationService.error('Lấy danh sách món ăn thất bại'),
+        ),
       ),
-    ),
+    { dispatch: false },
   );
 
   createItem$ = createEffect(() =>
@@ -72,6 +77,38 @@ export class ItemEffects {
           } else {
             this.notificationService.error('Tạo món ăn thất bại');
           }
+        }),
+      ),
+    { dispatch: false },
+  );
+
+  deleteItem$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(deleteItem),
+      switchMap(({ ids }) =>
+        this.itemService.delete(ids).pipe(
+          map((data) => deleteItemSuccess()),
+          catchError((err) => of(deleteItemFailed({ error: err }))),
+        ),
+      ),
+    ),
+  );
+
+  deleteItemSuccess$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(deleteItemSuccess),
+        tap(() => this.notificationService.success('Đã xóa món ăn')),
+      ),
+    { dispatch: false },
+  );
+
+  deleteItemFailed$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(deleteItemFailed),
+        tap(({ error }) => {
+          this.notificationService.error('Xóa món ăn thất bại');
         }),
       ),
     { dispatch: false },

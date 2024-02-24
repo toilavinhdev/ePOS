@@ -41,7 +41,7 @@ public class TenantContext : IdentityDbContext<ApplicationUser, ApplicationRole,
         ModelCreating<TenantTax>(builder);
         ModelCreating<Unit>(builder);
         ModelCreating<Category>(builder);
-        ModelCreating<CategoryItem>(builder);
+        builder.Entity<CategoryItem>().HasKey(x => new { x.CategoryId, x.ItemId });
         ModelCreating<Item>(builder, entityBuilder => entityBuilder.HasIndex(x => x.Sku));
         ModelCreating<ItemImage>(builder);
         ModelCreating<ItemSize>(builder);

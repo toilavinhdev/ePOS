@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-inventory',
+  selector: 'app-pos-bill',
   standalone: true,
   imports: [],
-  templateUrl: './inventory.component.html',
+  templateUrl: './pos-bill.component.html',
   styles: ``
 })
-export class InventoryComponent {
+export class PosBillComponent {
 
 }

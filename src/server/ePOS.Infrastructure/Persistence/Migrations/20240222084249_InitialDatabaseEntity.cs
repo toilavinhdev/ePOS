@@ -24,9 +24,6 @@ namespace ePOS.Infrastructure.Persistence.Migrations
                 name: "Sequence_Category");
 
             migrationBuilder.CreateSequence<int>(
-                name: "Sequence_CategoryItem");
-
-            migrationBuilder.CreateSequence<int>(
                 name: "Sequence_Item");
 
             migrationBuilder.CreateSequence<int>(
@@ -345,15 +342,12 @@ namespace ePOS.Infrastructure.Persistence.Migrations
                 name: "CategoryItems",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    SubId = table.Column<long>(type: "bigint", nullable: false, defaultValueSql: "NEXT VALUE FOR Sequence_CategoryItem")
+                    ItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CategoryItems", x => x.Id);
+                    table.PrimaryKey("PK_CategoryItems", x => new { x.CategoryId, x.ItemId });
                     table.ForeignKey(
                         name: "FK_CategoryItems_Categories_CategoryId",
                         column: x => x.CategoryId,
@@ -498,19 +492,9 @@ namespace ePOS.Infrastructure.Persistence.Migrations
                 column: "SubId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CategoryItems_CategoryId",
-                table: "CategoryItems",
-                column: "CategoryId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_CategoryItems_ItemId",
                 table: "CategoryItems",
                 column: "ItemId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CategoryItems_SubId",
-                table: "CategoryItems",
-                column: "SubId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Files_SubId",
@@ -650,9 +634,6 @@ namespace ePOS.Infrastructure.Persistence.Migrations
 
             migrationBuilder.DropSequence(
                 name: "Sequence_Category");
-
-            migrationBuilder.DropSequence(
-                name: "Sequence_CategoryItem");
 
             migrationBuilder.DropSequence(
                 name: "Sequence_Item");

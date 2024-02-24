@@ -30,4 +30,11 @@ public class CategoryController : ControllerBase
     {
         return Ok(await _mediator.Send(query));
     }
+    
+    [HttpPost("delete")]
+    [ApplicationPermission]
+    public async Task<IActionResult> Delete([FromBody] DeleteCategoryCommand query)
+    {
+        return Ok(await _mediator.Send(query));
+    }
 }

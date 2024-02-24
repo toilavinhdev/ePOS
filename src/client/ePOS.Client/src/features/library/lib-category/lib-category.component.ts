@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import {
   DynamicTableComponent,
   SectionContentComponent,
@@ -16,6 +16,9 @@ import { Store } from '@ngrx/store';
 import {
   categoryListSelector,
   categoryPaginatorSelector,
+  createCategorySuccess,
+  deleteCategory,
+  deleteCategorySuccess,
   listCategory,
 } from '@app-shared/store/category';
 import {
@@ -27,6 +30,8 @@ import { IPaginator } from '@app-shared/core/models/common.models';
 import { AsyncPipe } from '@angular/common';
 import { TagModule } from 'primeng/tag';
 import { FormType } from '@app-shared/core/models/form.models';
+import { Actions, ofType } from '@ngrx/effects';
+import { ConfirmService } from '@app-shared/services';
 
 @Component({
   selector: 'app-lib-category',
@@ -49,9 +54,13 @@ export class LibCategoryComponent extends BaseComponent implements OnInit {
   categories$!: Observable<ICategoryViewModel[]>;
   paginator$!: Observable<IPaginator | undefined>;
 
+  @ViewChild('modal') modal!: LibCategoryDetailModalComponent;
+
   constructor(
     private formBuilder: UntypedFormBuilder,
     private store: Store,
+    private actions$: Actions,
+    private confirmService: ConfirmService,
   ) {
     super();
   }
@@ -59,7 +68,20 @@ export class LibCategoryComponent extends BaseComponent implements OnInit {
   ngOnInit() {
     this.buildForm();
     this.setSelector();
+    this.subscribeRegister();
     this.loadData();
+  }
+
+  private subscribeRegister() {
+    this.actions$
+      .pipe(takeUntil(this.destroy$), ofType(createCategorySuccess))
+      .subscribe(() => {
+        this.modal.hideModal();
+        this.loadData();
+      });
+    this.actions$
+      .pipe(ofType(deleteCategorySuccess), takeUntil(this.destroy$))
+      .subscribe(() => this.loadData());
   }
 
   private setSelector() {
@@ -84,6 +106,14 @@ export class LibCategoryComponent extends BaseComponent implements OnInit {
       name: [null],
       isActive: [null],
       sort: [null],
+    });
+  }
+
+  onDelete(id: string) {
+    this.confirmService.show({
+      header: 'Xác nhận xóa',
+      message: 'Bạn có chắc muốn xóa danh mục này? Dữ liệu không thể hoàn tác',
+      accept: () => this.store.dispatch(deleteCategory({ ids: [id] })),
     });
   }
 

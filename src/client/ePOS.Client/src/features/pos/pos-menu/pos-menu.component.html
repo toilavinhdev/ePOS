@@ -1,0 +1,17 @@
+<div class="mr-[480px] px-8 pt-6">
+  <div class="flex justify-between items-center">
+    <div class="font-semibold text-[30px] text-black">{{ (tenant$ | async)?.name }}</div>
+    <div class="p-input-icon-left">
+      <i class="pi pi-search"></i>
+      <input type="text"
+             class="w-[380px]"
+             placeholder="Tìm kiếm món ăn"
+             [(ngModel)]="itemName"
+             (ngModelChange)="onSearchChange($event)"
+             pInputText />
+    </div>
+  </div>
+  <app-pos-menu-category #category (categoryIdChange)="onCategoryIdChange($event)"></app-pos-menu-category>
+
+  <app-pos-menu-item #item></app-pos-menu-item>
+</div>

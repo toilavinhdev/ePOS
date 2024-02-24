@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, Router, RouterLink } from '@angular/router';
 import { CommonModule, NgTemplateOutlet } from '@angular/common';
 import { filter } from 'rxjs';
+import { BaseComponent } from '@app-shared/core/abtractions';
 
 interface ISidebarItem {
   faIcon: string;
@@ -38,9 +39,9 @@ const items: ISidebarItem[] = [
     hidden: true,
   },
   {
-    faIcon: 'fa-solid fa-box-open',
-    title: 'Kho',
-    url: '/inventory',
+    faIcon: 'fa-solid fa-store',
+    title: 'POS',
+    url: '/pos',
     selected: false,
   },
 ];
@@ -51,13 +52,19 @@ const items: ISidebarItem[] = [
   imports: [RouterLink, NgTemplateOutlet, CommonModule],
   templateUrl: './sidebar.component.html',
 })
-export class SidebarComponent implements OnInit {
+export class SidebarComponent extends BaseComponent implements OnInit {
   currentTitle!: string;
   items = items;
 
-  constructor(private _router: Router) {}
+  constructor(private _router: Router) {
+    super();
+  }
 
   ngOnInit() {
+    this.trackItemSelected();
+  }
+
+  private trackItemSelected() {
     this.items.forEach((item) => {
       item.selected = this._router.url.includes(item.url);
       if (item.selected) this.currentTitle = item.title;

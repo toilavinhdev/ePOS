@@ -30,8 +30,6 @@ namespace ePOS.Infrastructure.Persistence.Migrations
 
             modelBuilder.HasSequence<int>("Sequence_Category");
 
-            modelBuilder.HasSequence<int>("Sequence_CategoryItem");
-
             modelBuilder.HasSequence<int>("Sequence_Item");
 
             modelBuilder.HasSequence<int>("Sequence_ItemImage");
@@ -86,31 +84,15 @@ namespace ePOS.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("ePOS.Domain.CategoryAggregate.CategoryItem", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("CategoryId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("ItemId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<long>("SubId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasDefaultValueSql("NEXT VALUE FOR Sequence_CategoryItem");
-
-                    b.Property<Guid>("TenantId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
+                    b.HasKey("CategoryId", "ItemId");
 
                     b.HasIndex("ItemId");
-
-                    b.HasIndex("SubId");
 
                     b.ToTable("CategoryItems");
                 });

@@ -3,6 +3,7 @@
           [(visible)]="visible"
           [modal]="true"
           [draggable]="false"
+          (onHide)="onHideModal()"
           [resizable]="false">
   <form [formGroup]="form">
     <div class="flex flex-col gap-y-1">
@@ -57,7 +58,7 @@
       </div>
     </div>
     <p-button [disabled]="sizePrices.length === 5"
-              (onClick)="addSizePrice()"
+              (onClick)="addSizePriceControl()"
               label="Thêm size ({{sizePrices.length}}/5)"
               size="small"
               styleClass="h-[40px] mt-4"></p-button>
@@ -69,7 +70,14 @@
               styleClass="h-[40px] mt-4 ml-2"></p-button>
 
     <div class="mt-6">
-      <app-upload-multiple-image #uploadMultiple></app-upload-multiple-image>
+      <app-upload-multiple-image #uploadMultiple [urls]="imageUrls.value"></app-upload-multiple-image>
+      <pre>{{uploadMultiple.getFiles() | json}}</pre>
+    </div>
+
+    <div *ngIf="currentFormType === FormType.Update" class="mt-6">
+      <p-dropdown>
+
+      </p-dropdown>
     </div>
 
     <div class="flex space-x-2 justify-end mt-4">

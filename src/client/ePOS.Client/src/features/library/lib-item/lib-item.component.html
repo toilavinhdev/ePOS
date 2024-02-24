@@ -28,10 +28,9 @@
                    imageClass="w-[45px] aspect-square"></p-image>
           <div class="space-y-2">
             <ng-container *ngIf="row['itemCategories'].length">
-              <div>
-                <span *ngFor="let category of row['itemCategories']" class="bg-primary rounded text-[12px] font-[500] px-1">
-                  {{ category['name'] }}
-                </span>
+              <div class="space-x-1">
+                <span class="bg-primary rounded text-[12px] font-[500] px-1">{{ row['itemCategories']?.[0]?.['name'] }}</span>
+                <span *ngIf="row['itemCategories'].length > 1">+{{ row['itemCategories'].length - 1 }}</span>
               </div>
             </ng-container>
             <div>{{ row['name'] }}</div>
@@ -78,6 +77,7 @@
           <p-button icon="pi pi-trash"
                     size="small"
                     severity="secondary"
+                    (onClick)="onDelete(row['id'])"
                     [rounded]="true"></p-button>
         </div>
       </ng-template>

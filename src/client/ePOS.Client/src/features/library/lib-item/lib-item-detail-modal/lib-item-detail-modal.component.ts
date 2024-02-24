@@ -86,6 +86,10 @@ export class LibItemDetailModalComponent
     return this.form.get('price') as UntypedFormControl;
   }
 
+  get imageUrls(): UntypedFormControl {
+    return this.form.get('imageUrls') as UntypedFormControl;
+  }
+
   ngOnInit() {
     this.buildForm();
     this.loadUnits();
@@ -134,6 +138,15 @@ export class LibItemDetailModalComponent
           });
       }
     } else if (this.currentFormType === FormType.Update) {
+      const uploadModels = this.uploadMultipleComponent.getBothFileAndSrc();
+      const files = uploadModels
+        ?.map((x) => (x instanceof File ? x : undefined))
+        .filter((x) => x !== undefined);
+
+      console.log('FILES', files);
+
+      if (files!.length === 0) {
+      }
     }
   }
 
@@ -145,13 +158,20 @@ export class LibItemDetailModalComponent
   onShowUpdateModal(item: IItemViewModel) {
     this.currentFormType = FormType.Update;
     this.visible = true;
-    this.form.patchValue({ ...item });
+    item.sizePrices?.forEach((_) => this.addSizePriceControl());
+    this.form.patchValue({
+      ...item,
+      imageUrls: item.images?.map((x) => x.url),
+    });
   }
 
   onHideModal() {
     this.visible = false;
     this.form.reset();
+    this.sizePrices.clear();
+    this.uploadMultipleComponent.reset();
     this.currentFormType = FormType.Undefined;
+    this.uploadMultipleComponent.reset();
   }
 
   private loadUnits() {
@@ -181,7 +201,7 @@ export class LibItemDetailModalComponent
 
   protected readonly FormType = FormType;
 
-  addSizePrice() {
+  addSizePriceControl() {
     this.form.patchValue({
       price: null,
     });

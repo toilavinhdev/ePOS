@@ -54,14 +54,14 @@ public class CreateCategoryCommandHandler : APIRequestHandler<CreateCategoryComm
             var categoryItems = new List<CategoryItem>();
             foreach (var itemId in request.ItemIds)
             {
-                var itemExisted = await _context.Items.FirstOrDefaultAsync(x => x.Id.Equals(itemId), cancellationToken);
+                var itemExisted = await _context.Items.FirstOrDefaultAsync(x => x.Id.Equals(itemId) 
+                    && x.TenantId == UserClaimsValue.TenantId, cancellationToken);
                 if (itemExisted is null) throw new RecordNotFoundException(nameof(Item), itemId);
                 
                 categoryItems.Add(new CategoryItem()
                 {
                     CategoryId = category.Id,
-                    ItemId = itemId,
-                    TenantId = UserClaimsValue.TenantId
+                    ItemId = itemId
                 });
             }
             await _context.CategoryItems.AddRangeAsync(categoryItems, cancellationToken);

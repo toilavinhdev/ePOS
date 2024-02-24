@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import {
+  ConfirmDialogComponent,
   NotificationComponent,
   SpinnerOverlayComponent,
   SvgDefinitionsComponent,
@@ -15,6 +16,7 @@ import { PrimeNGConfig } from 'primeng/api';
     SpinnerOverlayComponent,
     NotificationComponent,
     SvgDefinitionsComponent,
+    ConfirmDialogComponent,
   ],
   templateUrl: './app.component.html',
 })

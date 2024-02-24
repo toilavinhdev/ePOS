@@ -1,6 +1,7 @@
 ﻿using System.Linq.Expressions;
 using ePOS.Application.Common.Contracts;
 using ePOS.Application.Common.Mediator;
+using ePOS.Application.Responses;
 using ePOS.Application.ViewModels;
 using ePOS.Domain.CategoryAggregate;
 using ePOS.Shared.Extensions;
@@ -32,13 +33,6 @@ public class ListCategoryQueryValidator : AbstractValidator<ListCategoryQuery>
     }
 }
 
-public class ListCategoryResponse
-{
-    public List<CategoryViewModel> Records { get; set; } = default!;
-
-    public Paginator Paginator { get; set; } = default!;
-}
-
 public class ListCategoryQueryHandler : APIRequestHandler<ListCategoryQuery, ListCategoryResponse>
 {
     private readonly ITenantContext _context;
@@ -54,7 +48,7 @@ public class ListCategoryQueryHandler : APIRequestHandler<ListCategoryQuery, Lis
         Expression<Func<Category, object>> sortExpression = x => x.CreatedAt;
         var sortAsc = true;
         
-        whereExpression.And(x => x.TenantId.Equals(UserClaimsValue.TenantId));
+        whereExpression = whereExpression.And(x => x.TenantId.Equals(UserClaimsValue.TenantId));
 
         if (request.Name is not null) whereExpression = whereExpression.And(x => x.Name.Contains(request.Name));
         

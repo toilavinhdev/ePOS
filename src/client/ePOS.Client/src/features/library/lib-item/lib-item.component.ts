@@ -12,6 +12,8 @@ import {
 import { Observable, takeUntil } from 'rxjs';
 import {
   createItemSuccess,
+  deleteItem,
+  deleteItemSuccess,
   itemListSelector,
   itemPaginatorSelector,
   listItem,
@@ -28,6 +30,7 @@ import { ImageModule } from 'primeng/image';
 import { defaultImagePath } from '@app-shared/constants';
 import { LibItemDetailModalComponent } from '@app-features/library/lib-item/lib-item-detail-modal/lib-item-detail-modal.component';
 import { Actions, ofType } from '@ngrx/effects';
+import { ConfirmService } from '@app-shared/services';
 
 @Component({
   selector: 'app-lib-item',
@@ -60,6 +63,7 @@ export class LibItemComponent extends BaseComponent implements OnInit {
     private store: Store,
     private formBuilder: UntypedFormBuilder,
     private actions$: Actions,
+    private confirmService: ConfirmService,
   ) {
     super();
   }
@@ -68,11 +72,20 @@ export class LibItemComponent extends BaseComponent implements OnInit {
     this.buildForm();
     this.loadData();
     this.setSelector();
+    this.registerAction();
+  }
 
+  private registerAction() {
     this.actions$
       .pipe(ofType(createItemSuccess), takeUntil(this.destroy$))
       .subscribe(() => {
         this.modal.onHideModal();
+        this.loadData();
+      });
+
+    this.actions$
+      .pipe(ofType(deleteItemSuccess), takeUntil(this.destroy$))
+      .subscribe(() => {
         this.loadData();
       });
   }
@@ -115,6 +128,14 @@ export class LibItemComponent extends BaseComponent implements OnInit {
   onSortChange(event: string) {
     this.filterForm.patchValue({
       sort: event,
+    });
+  }
+
+  onDelete(id: string) {
+    this.confirmService.show({
+      header: 'Xóa món ăn',
+      message: 'Bạn có chắc muốn xóa món ăn này? Dữ liệu không thể hoàn tác',
+      accept: () => this.store.dispatch(deleteItem({ ids: [id] })),
     });
   }
 }

@@ -1,0 +1,10 @@
+<div class="mt-10">
+  <div class="grid grid-cols-6 gap-4">
+    @for (item of (items$ | async)!; track item) {
+      <div class="bg-white rounded-lg p-2 cursor-pointer">
+        <p-image [src]="item.images?.[0]?.url ?? defaultImagePath" imageClass="w-full aspect-square"></p-image>
+        <div class="text-black mt-2 font-[500]">{{item.name}}</div>
+      </div>
+    }
+  </div>
+</div>
