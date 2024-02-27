@@ -8,7 +8,7 @@
 - JWT Bearer
 - Clean Architecture, CQRS Pattern, REPR Pattern
 
-### Frontend:
+### Frontend
 - Angular 17
 - NgRx 17
 - PrimeNG, Tailwind
