@@ -34,6 +34,8 @@ import {
   IItemViewModel,
 } from '@app-shared/models/item.models';
 import { NotificationService, StorageService } from '@app-shared/services';
+import { itemStatusOptions } from '@app-shared/constants/item.const';
+import { TagModule } from 'primeng/tag';
 
 @Component({
   selector: 'app-lib-item-detail-modal',
@@ -50,6 +52,7 @@ import { NotificationService, StorageService } from '@app-shared/services';
     AsyncPipe,
     UploadMultipleImageComponent,
     JsonPipe,
+    TagModule,
   ],
   templateUrl: './lib-item-detail-modal.component.html',
   styles: ``,
@@ -187,6 +190,7 @@ export class LibItemDetailModalComponent
       sku: [null, [Validators.required]],
       imageUrls: [null],
       price: [null],
+      isActive: [null],
       sizePrices: this.formBuilder.array([]),
       unitId: [null, [Validators.required]],
       toppingIds: [null],
@@ -202,9 +206,6 @@ export class LibItemDetailModalComponent
   protected readonly FormType = FormType;
 
   addSizePriceControl() {
-    this.form.patchValue({
-      price: null,
-    });
     if (this.sizePrices.length === 5) return;
     this.sizePrices.push(
       this.formBuilder.group({
@@ -221,4 +222,6 @@ export class LibItemDetailModalComponent
   removeAllSizePrice() {
     this.sizePrices.clear();
   }
+
+  protected readonly itemStatusOptions = itemStatusOptions;
 }

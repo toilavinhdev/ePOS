@@ -21,6 +21,11 @@ export const categoryListSelector = createSelector(
   (state) => state.categories,
 );
 
+export const categoryTotalRecordSelector = createSelector(
+  featureCategory,
+  (state) => state.totalRecords,
+);
+
 export const categoryPaginatorSelector = createSelector(
   featureCategory,
   (state) => state.paginator,

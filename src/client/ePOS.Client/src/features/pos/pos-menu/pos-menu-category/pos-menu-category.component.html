@@ -1,12 +1,12 @@
-<div class="flex gap-x-3 mt-10">
-  <div class="{{ !selectedCategoryId ? 'bg-primary' : 'bg-[#9A9A9A]' }} px-4 py-2 rounded cursor-pointer transition duration-100"
+<div class="flex flex-wrap gap-x-3 mt-10">
+  <div class="{{ !selectedCategoryId ? 'bg-primary' : 'bg-[#dadada]' }} font-medium px-4 py-2 rounded cursor-pointer transition duration-100"
        (click)="selectCategory(undefined)">
-    Tất cả
+    Tất cả ({{ (totalRecords$ | async)! }})
   </div>
   @for (category of (categories$ | async)!; track category) {
-    <div class="{{ selectedCategoryId === category.id ? 'bg-primary' : 'bg-[#9A9A9A]' }} px-4 py-2 rounded cursor-pointer transition duration-100"
+    <div class="{{ selectedCategoryId === category.id ? 'bg-primary' : 'bg-[#dadada]' }} font-medium px-4 py-2 rounded cursor-pointer transition duration-100"
          (click)="selectCategory(category.id)">
-      {{category.name}}
+      {{category.name}} ({{category.itemCount}})
     </div>
   }
 </div>

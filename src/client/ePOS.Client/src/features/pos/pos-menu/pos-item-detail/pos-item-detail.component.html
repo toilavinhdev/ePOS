@@ -1,0 +1,43 @@
+<p-sidebar [(visible)]="sidebarVisible"
+           (visibleChange)="onVisibleChange($event)"
+           [showCloseIcon]="false"
+           styleClass="w-[400px]">
+  <p-image [src]="selectedItem?.images?.[0]?.url ?? defaultImagePath" imageClass="w-[100px]"></p-image>
+  <h2>{{ selectedItem?.name }}</h2>
+  <div class="tex-[20px]">{{ selectedItem?.price | number:'1.0-0' }} ₫ <span class="text-[#9A9A9A]">/{{ selectedItem?.unitName }}</span></div>
+  <div *ngIf="selectedItem?.sizePrices?.length">
+    <h4>Size:</h4>
+    <div class="flex flex-wrap gap-3">
+      <div *ngFor="let sizePrice of selectedItem?.sizePrices"
+           (click)="selectSize(sizePrice)"
+           class="{{(selectedSize &&  selectedSize.id === sizePrice.id) ? 'bg-primary' : 'bg-[#dadada]' }} cursor-pointer rounded px-3 py-2">
+        {{ sizePrice.name }} +{{ sizePrice.price }} ₫</div>
+    </div>
+  </div>
+  <div class="flex items-center justify-between gap-6 mt-8">
+    <h4>Số lượng:</h4>
+    <p-inputNumber [showButtons]="true"
+                   [step]="1"
+                   [min]="1"
+                   [(ngModel)]="quantity"
+                   inputStyleClass="w-[100px] text-center"
+                   decrementButtonClass="p-button-secondary"
+                   incrementButtonIcon="pi pi-plus"
+                   decrementButtonIcon="pi pi-minus"
+                   buttonLayout="horizontal"></p-inputNumber>
+  </div>
+  <p-button *ngIf="!modeEdit"
+            label="Thêm vào đơn"
+            (onClick)="onAddToInvoice()"
+            styleClass="mt-8 w-full"></p-button>
+  <p-button *ngIf="modeEdit"
+            label="Lưu"
+            severity="success"
+            (onClick)="saveLine()"
+            styleClass="mt-8 w-full"></p-button>
+  <p-button *ngIf="modeEdit"
+            label="Xóa khỏi đơn"
+            severity="secondary"
+            (onClick)="deleteLine()"
+            styleClass="mt-2 w-full"></p-button>
+</p-sidebar>

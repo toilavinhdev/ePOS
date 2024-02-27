@@ -21,4 +21,5 @@ export const appStateKey = {
   feature_storage: 'feature_storage',
   feature_item: 'feature_item',
   feature_category: 'feature_category',
+  feature_order: 'feature_order',
 };

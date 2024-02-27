@@ -1,3 +1,56 @@
-<div class="fixed top-0 right-0 w-[480px] h-screen bg-white p-8">
-  <div class="text-black font-semibold text-[20px]">Hóa đơn</div>
+<div class="fixed top-0 right-0 w-[420px] h-screen bg-white p-8">
+  <div class="flex justify-between items-center">
+    <div class="text-black font-semibold text-[20px]">Hóa đơn</div>
+    <p-button icon="pi pi-refresh" severity="secondary" (onClick)="removeAllLine()"></p-button>
+  </div>
+
+  <div class="mt-6 pr-4 space-y-3 h-[calc(100vh-310px)] overflow-y-auto">
+    @for (line of (lines$ | async)!; track line) {
+      <div class="flex gap-x-3 cursor-pointer"
+           (click)="detail.selectLine(line)">
+        <p-image [src]="line.item.images?.[0]?.url ?? defaultImagePath"
+                 imageClass="w-[60px] aspect-square"></p-image>
+        <div class="*:flex *:justify-between *:text-black w-full">
+          <div class="font-medium">
+            <div>{{ line.item.name }} <span class="bg-primary px-[5px] py-[1px] text-[12px] rounded ml-1">x{{ line.quantity }}</span></div>
+            <div>{{ line.item.price | number:'1.0-0' }} ₫</div>
+          </div>
+          <div *ngIf="line.size" class="text-[12px] mt-1">
+            <div>{{ line.size.name }}</div>
+            <div>+{{ line.size.price | number:'1.0-0' }} ₫</div>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+
+  <div class="mt-4">
+    <div id="calculator" class="*:flex *:justify-between *:text-black space-y-2 bg-[#dddddd] rounded-lg px-6 py-4 box-content">
+      <div>
+        <div>Tạm tính</div>
+        <div>{{ (subTotal$ | async)! | number:'1.0-0' }} ₫</div>
+      </div>
+      <div class="text-[#757575]">
+        <div>Giảm giá</div>
+        <div>0 ₫</div>
+      </div>
+      <div class="text-[#757575]">
+        <div>Thuế</div>
+        <div>0 ₫</div>
+      </div>
+      <div class="text-[16px] font-semibold text-black">
+        <div>Tổng cộng</div>
+        <div>{{ (subTotal$ | async)! | number:'1.0-0' }} ₫</div>
+      </div>
+    </div>
+    <p-button label="Thanh toán"
+              [disabled]="(lines$ | async)!.length === 0"
+              [severity]="(lines$ | async)!.length === 0 ? 'secondary' : ''"
+              icon="pi pi-shopping-cart"
+              size="large"
+              (onClick)="onCheckout()"
+              styleClass="w-full mt-5"></p-button>
+  </div>
 </div>
+
+<app-pos-item-detail #detail></app-pos-item-detail>

@@ -24,16 +24,36 @@
                     formControlName="unitId"
                     styleClass="w-[180px]"></p-dropdown>
       </div>
+      <ng-container *ngIf="currentFormType === FormType.Update">
+        <div class="flex flex-col gap-y-1">
+          <label>Trạng thái:</label>
+          <p-dropdown formControlName="isActive"
+                      [options]="itemStatusOptions"
+                      optionLabel="label"
+                      optionValue="value"
+                      panelStyleClass="w-[180px]"
+                      styleClass="w-[180px]">
+            <ng-template pTemplate="selectedItem">
+              <p-tag [severity]="form.get('isActive')?.value ? 'success' : ''"
+                     [value]="form.get('isActive')?.value ? 'Đang hoạt động' : 'Đã khóa'"></p-tag>
+            </ng-template>
+            <ng-template let-option pTemplate="item">
+              <p-tag [severity]="option.value ? 'success' : ''"
+                     [value]="option.value ? 'Đang hoạt động' : 'Đã khóa'"></p-tag>
+            </ng-template>
+          </p-dropdown>
+        </div>
+      </ng-container>
     </div>
 
     <div class="mt-6 {{!sizePrices.length ? 'inline-block' : ''}}">
-      <div *ngIf="!sizePrices.length" class="flex flex-col gap-y-1 w-[240px] mr-4">
-        <label>Giá bán:</label>
+      <div class="flex flex-col gap-y-1 w-[240px] mr-4">
+        <label>Giá bán mặc định:</label>
         <p-inputNumber formControlName="price"
                        styleClass="w-full"
                        [min]="0"></p-inputNumber>
       </div>
-      <div *ngIf="sizePrices.length">
+      <div *ngIf="sizePrices.length" class="mt-6">
         <ng-container formArrayName="sizePrices">
           <div *ngFor="let _ of sizePrices.controls; let idx=index"
                [formGroupName]="idx"
@@ -44,9 +64,10 @@
                      formControlName="name">
             </div>
             <div class="flex flex-col gap-y-1 w-[240px]">
-              <label>Giá bán:</label>
+              <label>Giá:</label>
               <p-inputNumber formControlName="price"
                              styleClass="w-full"
+                             prefix="+ "
                              [min]="0"></p-inputNumber>
             </div>
             <div (click)="removeSizePrice(idx)"
@@ -71,13 +92,6 @@
 
     <div class="mt-6">
       <app-upload-multiple-image #uploadMultiple [urls]="imageUrls.value"></app-upload-multiple-image>
-      <pre>{{uploadMultiple.getFiles() | json}}</pre>
-    </div>
-
-    <div *ngIf="currentFormType === FormType.Update" class="mt-6">
-      <p-dropdown>
-
-      </p-dropdown>
     </div>
 
     <div class="flex space-x-2 justify-end mt-4">
@@ -91,6 +105,4 @@
                 (onClick)="onSubmit()"></p-button>
     </div>
   </form>
-
-  <pre>{{form.value | json}}</pre>
 </p-dialog>

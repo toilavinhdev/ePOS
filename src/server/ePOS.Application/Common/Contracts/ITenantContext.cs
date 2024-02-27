@@ -1,6 +1,7 @@
 ﻿using ePOS.Domain.CategoryAggregate;
 using ePOS.Domain.FileAggregate;
 using ePOS.Domain.ItemAggregate;
+using ePOS.Domain.OrderAggregate;
 using ePOS.Domain.TenantAggregate;
 using ePOS.Domain.UnitAggregate;
 using Microsoft.EntityFrameworkCore;
@@ -20,4 +21,6 @@ public interface ITenantContext
     DbSet<ItemImage> ItemImages { get; set; }
     DbSet<ItemSize> ItemSizes { get; set; }
     DbSet<ItemTax> ItemTaxes { get; set; }
+    DbSet<Order> Orders { get; set; }
+    DbSet<OrderItem> OrderItems { get; set; }
 }

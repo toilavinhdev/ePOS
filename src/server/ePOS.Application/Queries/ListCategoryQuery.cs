@@ -22,6 +22,8 @@ public class ListCategoryQuery : IAPIRequest<ListCategoryResponse>
     public string? Sort { get; set; }
     
     public bool? IsActive { get; set; }
+    
+    public string? ItemName { get; set; }
 }
 
 public class ListCategoryQueryValidator : AbstractValidator<ListCategoryQuery>
@@ -54,6 +56,8 @@ public class ListCategoryQueryHandler : APIRequestHandler<ListCategoryQuery, Lis
         
         if (request.IsActive is not null) whereExpression = whereExpression.And(x => x.IsActive == request.IsActive);
         
+        if (request.ItemName is not null) whereExpression = whereExpression.And(x => x.CategoryItems!.Any(y => y.Item.Name.Contains(request.ItemName)));
+        
         if (request.Sort is not null)
         {
             if (request.Sort.StartsWith("+")) sortAsc = true;
@@ -64,15 +68,23 @@ public class ListCategoryQueryHandler : APIRequestHandler<ListCategoryQuery, Lis
         }
 
         var query = await _context.Categories
-            .Include(x => x.CategoryItems)
+            .Include(x => x.CategoryItems)!.ThenInclude(x => x.Item)
             .Where(whereExpression)
             .ToSortedQuery(sortExpression, sortAsc)
             .ToPagedQuery(request.PageIndex, request.PageSize, out var paginator)
             .ToListAsync(cancellationToken);
 
+        var totalItem = await _context.Items
+            .CountAsync(
+                x => x.Name.Contains(request.ItemName ?? string.Empty) 
+                     && x.TenantId == UserClaimsValue.TenantId
+                     && x.IsActive == true
+                , cancellationToken);
+
         var result = new ListCategoryResponse()
         {
             Paginator = paginator,
+            TotalRecords = totalItem,
             Records = query.Select(x => new CategoryViewModel()
             {
                 Id = x.Id,

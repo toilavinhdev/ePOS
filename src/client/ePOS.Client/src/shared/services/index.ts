@@ -7,3 +7,4 @@ export * from './item.service';
 export * from './unit.service';
 export * from './category.service';
 export * from './confirm.service';
+export * from './order.service';

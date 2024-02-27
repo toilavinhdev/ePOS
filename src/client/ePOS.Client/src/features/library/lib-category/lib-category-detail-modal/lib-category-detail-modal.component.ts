@@ -21,6 +21,7 @@ import { Observable, takeUntil } from 'rxjs';
 import { AsyncPipe, JsonPipe } from '@angular/common';
 import { createCategory } from '@app-shared/store/category';
 import { ICreateCategoryRequest } from '@app-shared/models/category.models';
+import { Actions } from '@ngrx/effects';
 
 @Component({
   selector: 'app-lib-category-detail-modal',
@@ -88,6 +89,7 @@ export class LibCategoryDetailModalComponent
   hideModal() {
     this.visible = false;
     this.formType = FormType.Undefined;
+    this.form.reset();
   }
 
   private setSelector() {

@@ -97,10 +97,11 @@ public class ListItemQueryHandler : APIRequestHandler<ListItemQuery, ListItemRes
                 Price = x.Price,
                 SizePrices = x.ItemSizes?.Select(y => new ItemSizePriceViewModel()
                 {
+                    Id = y.Id,
                     Name = y.Name,
                     Price = y.Price,
                     SortIndex = y.SortIndex
-                }).ToList(),
+                }).OrderBy(y => y.Price).ToList(),
                 UnitId = x.UnitId,
                 UnitName = x.Unit.Name,
                 Images = x.ItemImages?.Select(y => new ItemImageViewModel()

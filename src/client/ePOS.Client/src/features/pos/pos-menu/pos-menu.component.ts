@@ -9,12 +9,9 @@ import { AsyncPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PosMenuCategoryComponent } from '@app-features/pos/pos-menu/pos-menu-category/pos-menu-category.component';
 import { PosMenuItemComponent } from '@app-features/pos/pos-menu/pos-menu-item/pos-menu-item.component';
-import {
-  itemListSelector,
-  itemLoadingListSelector,
-  listItem,
-} from '@app-shared/store/item';
+import { itemListSelector, listItem } from '@app-shared/store/item';
 import { IItemViewModel } from '@app-shared/models/item.models';
+import { listCategory } from '@app-shared/store/category';
 
 @Component({
   selector: 'app-pos-menu',
@@ -70,6 +67,17 @@ export class PosMenuComponent extends BaseComponent implements OnInit {
           pageSize: this.pageSize,
           name: this.itemName,
           categoryId: this.categoryId,
+          isActive: true,
+        },
+      }),
+    );
+    this.store.dispatch(
+      listCategory({
+        payload: {
+          pageIndex: 1,
+          pageSize: 20,
+          isActive: true,
+          itemName: this.itemName,
         },
       }),
     );

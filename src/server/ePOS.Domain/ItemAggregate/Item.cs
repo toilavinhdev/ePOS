@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using ePOS.Domain.CategoryAggregate;
+using ePOS.Domain.OrderAggregate;
 using ePOS.Domain.UnitAggregate;
 using ePOS.Shared.ValueObjects;
 
@@ -26,4 +27,6 @@ public class Item : AuditableEntity, IAggregateRoot
     public List<ItemSize>? ItemSizes { get; set; }
     
     public List<CategoryItem>? CategoryItems { get; set; }
+    
+    public List<OrderItem> OrderItems { get; set; } = default!;
 }

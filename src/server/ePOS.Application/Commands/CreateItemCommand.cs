@@ -15,7 +15,7 @@ public class CreateItemCommand : IAPIRequest
 
     public string Sku { get; set; } = default!;
     
-    public double? Price { get; set; }
+    public double Price { get; set; }
     
     public Guid UnitId { get; set; }
 
@@ -47,8 +47,6 @@ public class CreateItemCommandHandler : APIRequestHandler<CreateItemCommand>
     {
         if (!await _context.Units.AnyAsync(x => x.Id.Equals(request.UnitId), cancellationToken))
             throw new RecordNotFoundException(nameof(Unit));
-
-        if (request is { Price: null, SizePrices: null }) throw new BadRequestException("Missing item price or size");
         
         if (await _context.Items.AnyAsync(x => x.Sku.Equals(request.Sku) && x.TenantId == UserClaimsValue.TenantId, cancellationToken)) 
             throw new DuplicateValueException(nameof(Item.Sku));
@@ -60,7 +58,7 @@ public class CreateItemCommandHandler : APIRequestHandler<CreateItemCommand>
             IsActive = true,
             Sku = request.Sku,
             UnitId = request.UnitId,
-            Price = (request.SizePrices is not null && request.SizePrices.Count > 0) ? 0 : request.Price ?? 0,
+            Price = request.Price,
         };
         item.SetCreationTracking(UserClaimsValue);
         await _context.Items.AddAsync(item, cancellationToken);

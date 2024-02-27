@@ -1,10 +1,17 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { BaseComponent } from '@app-shared/core/abtractions';
 import { Store } from '@ngrx/store';
-import { categoryListSelector, listCategory } from '@app-shared/store/category';
+import {
+  categoryListSelector,
+  categoryPaginatorSelector,
+  categoryTotalRecordSelector,
+  listCategory,
+} from '@app-shared/store/category';
 import { Observable, takeUntil } from 'rxjs';
 import { ICategoryViewModel } from '@app-shared/models/category.models';
 import { AsyncPipe, NgIf } from '@angular/common';
+import { IPaginator } from '@app-shared/core/models/common.models';
+import { itemPaginatorSelector } from '@app-shared/store/item';
 
 @Component({
   selector: 'app-pos-menu-category',
@@ -19,6 +26,8 @@ export class PosMenuCategoryComponent extends BaseComponent implements OnInit {
   categories$!: Observable<ICategoryViewModel[]>;
   selectedCategoryId: string | undefined = undefined;
 
+  totalRecords$!: Observable<number>;
+
   @Output() categoryIdChange = new EventEmitter<string | undefined>();
 
   constructor(private store: Store) {
@@ -26,18 +35,12 @@ export class PosMenuCategoryComponent extends BaseComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loadCategories();
     this.categories$ = this.store
       .select(categoryListSelector)
       .pipe(takeUntil(this.destroy$));
-  }
-
-  loadCategories() {
-    this.store.dispatch(
-      listCategory({
-        payload: { pageIndex: this.pageIndex, pageSize: this.pageSize },
-      }),
-    );
+    this.totalRecords$ = this.store
+      .select(categoryTotalRecordSelector)
+      .pipe(takeUntil(this.destroy$));
   }
 
   selectCategory(id: string | undefined) {

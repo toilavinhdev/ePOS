@@ -1,6 +1,6 @@
 <section class="epos-section-content">
   <div class="epos-section-header mb-6 flex justify-between items-center">
-    Danh sách món ăn
+    Danh sách sản phẩm
     <div class="space-x-2">
       <p-button label="Tải lên file"
                 size="small"
@@ -44,16 +44,7 @@
                 headerStyleClass="w-[180px] text-center"
                 columnStyleClass="text-center">
       <ng-template appCell let-row>
-        @if (row['sizePrices'].length > 0) {
-          <div class="grid grid-cols-4 gap-x-1">
-            @for (sizePrice of row['sizePrices']; track sizePrice) {
-              <span>{{sizePrice['name']}}:</span>
-              <span class="col-span-3 text-right pr-3">{{ sizePrice['price'] | number:'1.0-0' }} ₫</span>
-            }
-          </div>
-        } @else {
-          <div class="text-right">{{ row['price'] | number:'1.0-0' }} ₫</div>
-        }
+        <div class="text-right">{{ row['price'] | number:'1.0-0' }} ₫</div>
       </ng-template>
     </app-column>
     <app-column header="Trạng thái"

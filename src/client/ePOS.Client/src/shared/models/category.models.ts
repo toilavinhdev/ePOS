@@ -5,7 +5,8 @@ export interface IListCategoryRequest {
   pageSize: number;
   name?: string;
   sort?: string;
-  isActive?: string;
+  isActive?: boolean;
+  itemName?: string;
 }
 
 export interface ICategoryViewModel {
@@ -17,6 +18,7 @@ export interface ICategoryViewModel {
 
 export interface IListCategoryResponse {
   records: ICategoryViewModel[];
+  totalRecords: number;
   paginator: IPaginator;
 }
 

@@ -4,14 +4,37 @@ import { Store } from '@ngrx/store';
 import { itemListSelector } from '@app-shared/store/item';
 import { Observable, takeUntil } from 'rxjs';
 import { IItemViewModel } from '@app-shared/models/item.models';
-import { AsyncPipe, JsonPipe } from '@angular/common';
+import {
+  AsyncPipe,
+  DecimalPipe,
+  JsonPipe,
+  NgForOf,
+  NgIf,
+} from '@angular/common';
 import { ImageModule } from 'primeng/image';
+import { SidebarModule } from 'primeng/sidebar';
+import { ButtonModule } from 'primeng/button';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { FormsModule } from '@angular/forms';
+import { PosItemDetailComponent } from '@app-features/pos/pos-menu/pos-item-detail/pos-item-detail.component';
 import { defaultImagePath } from '@app-shared/constants';
 
 @Component({
   selector: 'app-pos-menu-item',
   standalone: true,
-  imports: [AsyncPipe, JsonPipe, ImageModule],
+  imports: [
+    AsyncPipe,
+    JsonPipe,
+    ImageModule,
+    SidebarModule,
+    ButtonModule,
+    DecimalPipe,
+    NgIf,
+    NgForOf,
+    InputNumberModule,
+    FormsModule,
+    PosItemDetailComponent,
+  ],
   templateUrl: './pos-menu-item.component.html',
   styles: ``,
 })
