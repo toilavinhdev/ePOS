@@ -4,7 +4,7 @@ using ePOS.Shared.ValueObjects;
 
 namespace ePOS.Domain.CategoryAggregate;
 
-public class CategoryItem : Entity
+public class CategoryItem
 {
     public Guid CategoryId { get; set; }
     [ForeignKey(nameof(CategoryId))]

@@ -14,6 +14,8 @@ import { UnitEffects, unitReducer } from '@app-shared/store/unit';
 import { StorageEffects, storageReducer } from '@app-shared/store/storage';
 import { ItemEffects, itemReducer } from '@app-shared/store/item';
 import { CategoryEffects, categoryReducer } from '@app-shared/store/category';
+import { orderReducer } from '@app-shared/store/order/order.reducer';
+import { OrderEffects } from '@app-shared/store/order/order.effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -27,6 +29,7 @@ export const appConfig: ApplicationConfig = {
       feature_storage: storageReducer,
       feature_item: itemReducer,
       feature_category: categoryReducer,
+      feature_order: orderReducer,
     }),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
     provideEffects([
@@ -36,6 +39,7 @@ export const appConfig: ApplicationConfig = {
       StorageEffects,
       ItemEffects,
       CategoryEffects,
+      OrderEffects,
     ]),
   ],
 };

@@ -40,6 +40,7 @@
           <p-button icon="pi pi-trash"
                     size="small"
                     severity="secondary"
+                    (onClick)="onDelete(row['id'])"
                     [rounded]="true"></p-button>
         </div>
       </ng-template>

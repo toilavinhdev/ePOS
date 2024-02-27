@@ -30,8 +30,6 @@ namespace ePOS.Infrastructure.Persistence.Migrations
 
             modelBuilder.HasSequence<int>("Sequence_Category");
 
-            modelBuilder.HasSequence<int>("Sequence_CategoryItem");
-
             modelBuilder.HasSequence<int>("Sequence_Item");
 
             modelBuilder.HasSequence<int>("Sequence_ItemImage");
@@ -39,6 +37,10 @@ namespace ePOS.Infrastructure.Persistence.Migrations
             modelBuilder.HasSequence<int>("Sequence_ItemSize");
 
             modelBuilder.HasSequence<int>("Sequence_ItemTax");
+
+            modelBuilder.HasSequence<int>("Sequence_Order");
+
+            modelBuilder.HasSequence<int>("Sequence_OrderItem");
 
             modelBuilder.HasSequence<int>("Sequence_TenantTax");
 
@@ -86,31 +88,15 @@ namespace ePOS.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("ePOS.Domain.CategoryAggregate.CategoryItem", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("CategoryId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("ItemId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<long>("SubId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasDefaultValueSql("NEXT VALUE FOR Sequence_CategoryItem");
-
-                    b.Property<Guid>("TenantId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
+                    b.HasKey("CategoryId", "ItemId");
 
                     b.HasIndex("ItemId");
-
-                    b.HasIndex("SubId");
 
                     b.ToTable("CategoryItems");
                 });
@@ -345,6 +331,90 @@ namespace ePOS.Infrastructure.Persistence.Migrations
                     b.HasIndex("SubId");
 
                     b.ToTable("ItemTaxes");
+                });
+
+            modelBuilder.Entity("ePOS.Domain.OrderAggregate.Order", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset?>("ModifiedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid?>("ModifiedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<long>("SubId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasDefaultValueSql("NEXT VALUE FOR Sequence_Order");
+
+                    b.Property<double>("SubTotal")
+                        .HasColumnType("float");
+
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<double>("TotalTax")
+                        .HasColumnType("float");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SubId");
+
+                    b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("ePOS.Domain.OrderAggregate.OrderItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ItemId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("ItemSizeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<long>("SubId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasDefaultValueSql("NEXT VALUE FOR Sequence_OrderItem");
+
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<double>("TotalLine")
+                        .HasColumnType("float");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ItemId");
+
+                    b.HasIndex("ItemSizeId");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("SubId");
+
+                    b.ToTable("OrderItems");
                 });
 
             modelBuilder.Entity("ePOS.Domain.TenantAggregate.Tenant", b =>
@@ -799,6 +869,31 @@ namespace ePOS.Infrastructure.Persistence.Migrations
                     b.Navigation("Item");
                 });
 
+            modelBuilder.Entity("ePOS.Domain.OrderAggregate.OrderItem", b =>
+                {
+                    b.HasOne("ePOS.Domain.ItemAggregate.Item", "Item")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ePOS.Domain.ItemAggregate.ItemSize", "ItemSize")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("ItemSizeId");
+
+                    b.HasOne("ePOS.Domain.OrderAggregate.Order", "Order")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Item");
+
+                    b.Navigation("ItemSize");
+
+                    b.Navigation("Order");
+                });
+
             modelBuilder.Entity("ePOS.Domain.TenantAggregate.TenantTax", b =>
                 {
                     b.HasOne("ePOS.Domain.TenantAggregate.Tenant", "Tenant")
@@ -887,6 +982,18 @@ namespace ePOS.Infrastructure.Persistence.Migrations
                     b.Navigation("ItemSizes");
 
                     b.Navigation("ItemTax");
+
+                    b.Navigation("OrderItems");
+                });
+
+            modelBuilder.Entity("ePOS.Domain.ItemAggregate.ItemSize", b =>
+                {
+                    b.Navigation("OrderItems");
+                });
+
+            modelBuilder.Entity("ePOS.Domain.OrderAggregate.Order", b =>
+                {
+                    b.Navigation("OrderItems");
                 });
 
             modelBuilder.Entity("ePOS.Domain.TenantAggregate.Tenant", b =>

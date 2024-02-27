@@ -37,4 +37,11 @@ public class ItemController : ControllerBase
     {
         return Ok(await _mediator.Send(command));
     }
+    
+    [HttpPost("delete")]
+    [ApplicationPermission]
+    public async Task<IActionResult> Delete([FromBody] DeleteItemsCommand command)
+    {
+        return Ok(await _mediator.Send(command));
+    }
 }

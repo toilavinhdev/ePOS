@@ -5,6 +5,9 @@ import {
   createCategory,
   createCategoryFailed,
   createCategorySuccess,
+  deleteCategory,
+  deleteCategoryFailed,
+  deleteCategorySuccess,
   listCategory,
   listCategoryFailed,
   listCategorySuccess,
@@ -31,13 +34,15 @@ export class CategoryEffects {
     ),
   );
 
-  listCategoryFailed$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(listCategoryFailed),
-      tap(() =>
-        this.notificationService.error('Lấy danh sách danh mục thất bại'),
+  listCategoryFailed$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(listCategoryFailed),
+        tap(() =>
+          this.notificationService.error('Lấy danh sách danh mục thất bại'),
+        ),
       ),
-    ),
+    { dispatch: false },
   );
 
   createCategory$ = createEffect(() =>
@@ -66,6 +71,36 @@ export class CategoryEffects {
       this.actions$.pipe(
         ofType(createCategoryFailed),
         tap(() => this.notificationService.error('Tạo danh mục thất bại')),
+      ),
+    { dispatch: false },
+  );
+
+  deleteCategory$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(deleteCategory),
+      switchMap(({ ids }) =>
+        this.categoryService.delete(ids).pipe(
+          map(() => deleteCategorySuccess()),
+          catchError((err) => of(deleteCategoryFailed({ error: err }))),
+        ),
+      ),
+    ),
+  );
+
+  deleteCategorySuccess$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(deleteCategorySuccess),
+        tap(() => this.notificationService.success('Đã xóa danh mục')),
+      ),
+    { dispatch: false },
+  );
+
+  deleteCategoryFailed$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(deleteCategoryFailed),
+        tap(() => this.notificationService.error('Xóa danh mục thất bại')),
       ),
     { dispatch: false },
   );

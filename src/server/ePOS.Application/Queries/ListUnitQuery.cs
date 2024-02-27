@@ -1,6 +1,7 @@
 ﻿using System.Linq.Expressions;
 using ePOS.Application.Common.Contracts;
 using ePOS.Application.Common.Mediator;
+using ePOS.Application.Responses;
 using ePOS.Application.ViewModels;
 using ePOS.Domain.UnitAggregate;
 using ePOS.Shared.Extensions;
@@ -21,13 +22,6 @@ public class ListUnitQuery : IAPIRequest<ListUnitResponse>
     public bool? IsDefault { get; set; }
     
     public string? Sort { get; set; }
-}
-
-public class ListUnitResponse
-{
-    public List<UnitViewModel> Records { get; set; } = default!;
-
-    public Paginator Paginator { get; set; } = default!;
 }
 
 public class ListUnitQueryValidator : AbstractValidator<ListUnitQuery>

@@ -1,5 +1,7 @@
 <div class="flex flex-wrap gap-x-3 gap-y-3">
-  <div *ngFor="let _ of [].constructor(count)">
-    <app-upload-image (fileChange)="onFileChange()" [styleClass]="itemStyleClass"></app-upload-image>
+  <div *ngFor="let _ of [].constructor(count); index as idx">
+    <app-upload-image (fileChange)="onFileChange()"
+                      [styleClass]="itemStyleClass"
+                      [src]="urls?.[idx]"></app-upload-image>
   </div>
 </div>

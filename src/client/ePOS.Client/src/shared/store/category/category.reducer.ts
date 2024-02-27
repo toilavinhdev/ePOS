@@ -14,6 +14,7 @@ export interface ICategoryState {
   loadingList: boolean;
   loadingCreateOrUpdate: boolean;
   categories: ICategoryViewModel[];
+  totalRecords: number;
   paginator?: IPaginator;
 }
 
@@ -21,6 +22,7 @@ const initialState: ICategoryState = {
   loadingList: false,
   loadingCreateOrUpdate: false,
   categories: [],
+  totalRecords: 0,
 };
 
 export const categoryReducer = createReducer(
@@ -31,6 +33,7 @@ export const categoryReducer = createReducer(
     loadingList: false,
     categories: response.records,
     paginator: response.paginator,
+    totalRecords: response.totalRecords,
   })),
   on(listCategoryFailed, (state) => ({ ...state, loadingList: false })),
   on(createCategory, (state) => ({ ...state, loadingCreateOrUpdate: true })),

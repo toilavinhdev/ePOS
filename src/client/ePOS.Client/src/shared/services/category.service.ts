@@ -32,4 +32,10 @@ export class CategoryService extends BaseService {
       .post<IAPIResponse<ICategoryViewModel>>(this.getApiUrl('create'), payload)
       .pipe(map((response) => response.data));
   }
+
+  delete(ids: string[]): Observable<any> {
+    return this.httpClient.post<IAPIResponse>(this.getApiUrl('delete'), {
+      ids,
+    });
+  }
 }

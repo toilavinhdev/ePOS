@@ -1,11 +1,11 @@
 <div class="flex min-h-screen bg-[#f2f2f2]">
   <app-sidebar #sidebar class="w-[100px] fixed top-0 left-0 h-screen"></app-sidebar>
-  <div class="flex-1 px-[40px] ml-[100px] mb-[40px]">
-    <div class="flex justify-between items-center mt-[24px]">
+  <div class="flex-1 {{ !isPosMode() ? 'px-[40px]' : '' }} ml-[100px]">
+    <div class="flex justify-between items-center mt-[24px] {{ isPosMode() ? 'hidden' : '' }}">
       <div class="font-bold text-[22px] text-black">{{ sidebarComponent.currentTitle }}</div>
       <app-user-avatar></app-user-avatar>
     </div>
-    <div class="mt-7">
+    <div class="{{ !isPosMode() ? 'mt-7' : '' }}">
       <router-outlet></router-outlet>
     </div>
   </div>

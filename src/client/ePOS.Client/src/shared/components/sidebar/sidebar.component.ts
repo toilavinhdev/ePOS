@@ -1,7 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, Router, RouterLink } from '@angular/router';
 import { CommonModule, NgTemplateOutlet } from '@angular/common';
-import { filter } from 'rxjs';
+import { filter, Observable, takeUntil } from 'rxjs';
+import { BaseComponent } from '@app-shared/core/abtractions';
+import { ITenantViewModel } from '@app-shared/models/tenant.models';
+import { Store } from '@ngrx/store';
+import { tenantSelector } from '@app-shared/store/tenant';
+import { ImageModule } from 'primeng/image';
+import { defaultImagePath } from '@app-shared/constants';
 
 interface ISidebarItem {
   faIcon: string;
@@ -38,9 +44,9 @@ const items: ISidebarItem[] = [
     hidden: true,
   },
   {
-    faIcon: 'fa-solid fa-box-open',
-    title: 'Kho',
-    url: '/inventory',
+    faIcon: 'fa-solid fa-store',
+    title: 'POS',
+    url: '/pos',
     selected: false,
   },
 ];
@@ -48,16 +54,29 @@ const items: ISidebarItem[] = [
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [RouterLink, NgTemplateOutlet, CommonModule],
+  imports: [RouterLink, NgTemplateOutlet, CommonModule, ImageModule],
   templateUrl: './sidebar.component.html',
 })
-export class SidebarComponent implements OnInit {
-  currentTitle!: string;
+export class SidebarComponent extends BaseComponent implements OnInit {
+  currentTitle: string = '';
   items = items;
+  tenant$!: Observable<ITenantViewModel | undefined>;
 
-  constructor(private _router: Router) {}
+  constructor(
+    private _router: Router,
+    private store: Store,
+  ) {
+    super();
+  }
 
   ngOnInit() {
+    this.trackItemSelected();
+    this.tenant$ = this.store
+      .select(tenantSelector)
+      .pipe(takeUntil(this.destroy$));
+  }
+
+  private trackItemSelected() {
     this.items.forEach((item) => {
       item.selected = this._router.url.includes(item.url);
       if (item.selected) this.currentTitle = item.title;
@@ -71,4 +90,6 @@ export class SidebarComponent implements OnInit {
         });
       });
   }
+
+  protected readonly defaultImagePath = defaultImagePath;
 }

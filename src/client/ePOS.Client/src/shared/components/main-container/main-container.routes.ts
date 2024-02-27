@@ -34,11 +34,9 @@ export const routes: Routes = [
           import('@app-features/library/library.routes').then((r) => r.routes),
       },
       {
-        path: 'inventory',
+        path: 'pos',
         loadChildren: () =>
-          import('@app-features/inventory/inventory.routes').then(
-            (r) => r.routes,
-          ),
+          import('@app-features/pos/pos.routes').then((r) => r.routes),
       },
     ],
   },

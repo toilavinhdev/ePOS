@@ -10,3 +10,4 @@ export * from './dynamic-table/dynamic-table.component';
 export * from './tab-menu/tab-menu.component';
 export * from './section-content/section-content.component';
 export * from './upload-multiple-image/upload-multiple-image.component';
+export * from './confirm-dialog/confirm-dialog.component';

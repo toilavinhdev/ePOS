@@ -17,18 +17,32 @@ import { UploadImageComponent } from '@app-shared/components/upload-image/upload
   styles: ``,
 })
 export class UploadMultipleImageComponent {
+  @Input() urls: string[] | undefined;
   @Input() count = 5;
   @Input() itemStyleClass = 'h-[100px] w-[100px]';
   @Output() fileChange = new EventEmitter<File[]>();
   files!: File[];
   @ViewChildren(UploadImageComponent)
-  uploadImageComponents!: QueryList<UploadImageComponent>;
+  uploadImageComponents?: QueryList<UploadImageComponent>;
 
   getFiles() {
-    return this.uploadImageComponents.filter((x) => x.file).map((x) => x.file);
+    return this.uploadImageComponents
+      ? this.uploadImageComponents.filter((x) => x.file).map((x) => x.file)
+      : [];
+  }
+
+  getBothFileAndSrc(): (File | string)[] | undefined {
+    return this.uploadImageComponents
+      ? this.uploadImageComponents.map((x) => x.src ?? x.file)
+      : undefined;
   }
 
   onFileChange() {
     this.fileChange.emit(this.getFiles());
+  }
+
+  reset() {
+    if (this.uploadImageComponents)
+      this.uploadImageComponents.forEach((x) => x.reset());
   }
 }

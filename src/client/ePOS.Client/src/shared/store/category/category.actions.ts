@@ -36,3 +36,15 @@ export const createCategoryFailed = createAction(
   '[Category] Create Failed',
   props<{ error: HttpErrorResponse }>(),
 );
+
+export const deleteCategory = createAction(
+  '[Category] Delete',
+  props<{ ids: string[] }>(),
+);
+
+export const deleteCategorySuccess = createAction('[Category] Delete Success');
+
+export const deleteCategoryFailed = createAction(
+  '[Category] Delete Failed',
+  props<{ error: HttpErrorResponse }>(),
+);

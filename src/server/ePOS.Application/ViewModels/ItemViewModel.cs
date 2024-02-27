@@ -34,6 +34,8 @@ public class ItemImageViewModel
 
 public class ItemSizePriceViewModel
 {
+    public Guid Id { get; set; }
+    
     public string Name { get; set; } = default!;
     
     public double Price { get; set; }

@@ -36,3 +36,15 @@ export const createItemFailed = createAction(
   '[Item] Create Failed',
   props<{ error: HttpErrorResponse }>(),
 );
+
+export const deleteItem = createAction(
+  '[Item] Delete',
+  props<{ ids: string[] }>(),
+);
+
+export const deleteItemSuccess = createAction('[Item] Delete Success');
+
+export const deleteItemFailed = createAction(
+  '[Item] Delete Failed',
+  props<{ error: HttpErrorResponse }>(),
+);

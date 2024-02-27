@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ePOS.Infrastructure.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialDatabaseEntity : Migration
+    public partial class InitialDatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -24,9 +24,6 @@ namespace ePOS.Infrastructure.Persistence.Migrations
                 name: "Sequence_Category");
 
             migrationBuilder.CreateSequence<int>(
-                name: "Sequence_CategoryItem");
-
-            migrationBuilder.CreateSequence<int>(
                 name: "Sequence_Item");
 
             migrationBuilder.CreateSequence<int>(
@@ -37,6 +34,12 @@ namespace ePOS.Infrastructure.Persistence.Migrations
 
             migrationBuilder.CreateSequence<int>(
                 name: "Sequence_ItemTax");
+
+            migrationBuilder.CreateSequence<int>(
+                name: "Sequence_Order");
+
+            migrationBuilder.CreateSequence<int>(
+                name: "Sequence_OrderItem");
 
             migrationBuilder.CreateSequence<int>(
                 name: "Sequence_TenantTax");
@@ -140,6 +143,26 @@ namespace ePOS.Infrastructure.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Files", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Orders",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SubTotal = table.Column<double>(type: "float", nullable: false),
+                    TotalTax = table.Column<double>(type: "float", nullable: false),
+                    TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SubId = table.Column<long>(type: "bigint", nullable: false, defaultValueSql: "NEXT VALUE FOR Sequence_Order"),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ModifiedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    ModifiedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Orders", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -345,15 +368,12 @@ namespace ePOS.Infrastructure.Persistence.Migrations
                 name: "CategoryItems",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    SubId = table.Column<long>(type: "bigint", nullable: false, defaultValueSql: "NEXT VALUE FOR Sequence_CategoryItem")
+                    ItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CategoryItems", x => x.Id);
+                    table.PrimaryKey("PK_CategoryItems", x => new { x.CategoryId, x.ItemId });
                     table.ForeignKey(
                         name: "FK_CategoryItems_Categories_CategoryId",
                         column: x => x.CategoryId,
@@ -443,6 +463,41 @@ namespace ePOS.Infrastructure.Persistence.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "OrderItems",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    OrderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ItemSizeId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    TotalLine = table.Column<double>(type: "float", nullable: false),
+                    TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SubId = table.Column<long>(type: "bigint", nullable: false, defaultValueSql: "NEXT VALUE FOR Sequence_OrderItem")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrderItems", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_OrderItems_ItemSizes_ItemSizeId",
+                        column: x => x.ItemSizeId,
+                        principalTable: "ItemSizes",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_OrderItems_Items_ItemId",
+                        column: x => x.ItemId,
+                        principalTable: "Items",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_OrderItems_Orders_OrderId",
+                        column: x => x.OrderId,
+                        principalTable: "Orders",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -498,19 +553,9 @@ namespace ePOS.Infrastructure.Persistence.Migrations
                 column: "SubId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CategoryItems_CategoryId",
-                table: "CategoryItems",
-                column: "CategoryId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_CategoryItems_ItemId",
                 table: "CategoryItems",
                 column: "ItemId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CategoryItems_SubId",
-                table: "CategoryItems",
-                column: "SubId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Files_SubId",
@@ -564,6 +609,31 @@ namespace ePOS.Infrastructure.Persistence.Migrations
                 column: "SubId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_OrderItems_ItemId",
+                table: "OrderItems",
+                column: "ItemId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderItems_ItemSizeId",
+                table: "OrderItems",
+                column: "ItemSizeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderItems_OrderId",
+                table: "OrderItems",
+                column: "OrderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderItems_SubId",
+                table: "OrderItems",
+                column: "SubId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_SubId",
+                table: "Orders",
+                column: "SubId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Tenants_Code",
                 table: "Tenants",
                 column: "Code");
@@ -613,10 +683,10 @@ namespace ePOS.Infrastructure.Persistence.Migrations
                 name: "ItemImages");
 
             migrationBuilder.DropTable(
-                name: "ItemSizes");
+                name: "ItemTaxes");
 
             migrationBuilder.DropTable(
-                name: "ItemTaxes");
+                name: "OrderItems");
 
             migrationBuilder.DropTable(
                 name: "TenantTaxes");
@@ -631,10 +701,16 @@ namespace ePOS.Infrastructure.Persistence.Migrations
                 name: "Categories");
 
             migrationBuilder.DropTable(
-                name: "Items");
+                name: "ItemSizes");
+
+            migrationBuilder.DropTable(
+                name: "Orders");
 
             migrationBuilder.DropTable(
                 name: "Tenants");
+
+            migrationBuilder.DropTable(
+                name: "Items");
 
             migrationBuilder.DropTable(
                 name: "Units");
@@ -652,9 +728,6 @@ namespace ePOS.Infrastructure.Persistence.Migrations
                 name: "Sequence_Category");
 
             migrationBuilder.DropSequence(
-                name: "Sequence_CategoryItem");
-
-            migrationBuilder.DropSequence(
                 name: "Sequence_Item");
 
             migrationBuilder.DropSequence(
@@ -665,6 +738,12 @@ namespace ePOS.Infrastructure.Persistence.Migrations
 
             migrationBuilder.DropSequence(
                 name: "Sequence_ItemTax");
+
+            migrationBuilder.DropSequence(
+                name: "Sequence_Order");
+
+            migrationBuilder.DropSequence(
+                name: "Sequence_OrderItem");
 
             migrationBuilder.DropSequence(
                 name: "Sequence_TenantTax");

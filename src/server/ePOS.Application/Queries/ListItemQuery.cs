@@ -1,6 +1,7 @@
 ﻿using System.Linq.Expressions;
 using ePOS.Application.Common.Contracts;
 using ePOS.Application.Common.Mediator;
+using ePOS.Application.Responses;
 using ePOS.Application.ViewModels;
 using ePOS.Domain.CategoryAggregate;
 using ePOS.Domain.ItemAggregate;
@@ -27,12 +28,6 @@ public class ListItemQuery : IAPIRequest<ListItemResponse>
     public string? Sort { get; set; }
 }
 
-public class ListItemResponse
-{
-    public List<ItemViewModel> Records { get; set; } = default!;
-
-    public Paginator Paginator { get; set; } = default!;
-}
 
 public class ListItemQueryValidator : AbstractValidator<ListItemQuery>
 {
@@ -82,7 +77,7 @@ public class ListItemQueryHandler : APIRequestHandler<ListItemQuery, ListItemRes
         }
 
         var query = await _context.Items
-            .Include(x => x.CategoryItems)
+            .Include(x => x.CategoryItems)!.ThenInclude(x => x.Category)
             .Include(x => x.ItemImages)
             .Include(x => x.Unit)
             .Include(x => x.ItemSizes)
@@ -102,10 +97,11 @@ public class ListItemQueryHandler : APIRequestHandler<ListItemQuery, ListItemRes
                 Price = x.Price,
                 SizePrices = x.ItemSizes?.Select(y => new ItemSizePriceViewModel()
                 {
+                    Id = y.Id,
                     Name = y.Name,
                     Price = y.Price,
                     SortIndex = y.SortIndex
-                }).ToList() ?? new List<ItemSizePriceViewModel>(),
+                }).OrderBy(y => y.Price).ToList(),
                 UnitId = x.UnitId,
                 UnitName = x.Unit.Name,
                 Images = x.ItemImages?.Select(y => new ItemImageViewModel()
@@ -119,7 +115,7 @@ public class ListItemQueryHandler : APIRequestHandler<ListItemQuery, ListItemRes
                     {
                         Id = y.Id,
                         Name = y.Name
-                    }).ToList() ?? new List<ItemCategoryViewModel>(),
+                    }).ToList(),
                 CreatedAt = x.CreatedAt
             }).ToList(),
             Paginator = paginator

@@ -5,7 +5,7 @@ export interface IItemViewModel {
   sku: string;
   name: string;
   isActive: boolean;
-  price?: boolean;
+  price: number;
   sizePrices?: IItemSizePriceViewModel[];
   unitId: string;
   unitName: string;
@@ -14,6 +14,7 @@ export interface IItemViewModel {
 }
 
 export interface IItemSizePriceViewModel {
+  id: string;
   name: string;
   price: number;
 }

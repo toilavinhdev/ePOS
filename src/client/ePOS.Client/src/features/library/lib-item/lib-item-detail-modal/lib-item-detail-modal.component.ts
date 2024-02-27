@@ -34,6 +34,8 @@ import {
   IItemViewModel,
 } from '@app-shared/models/item.models';
 import { NotificationService, StorageService } from '@app-shared/services';
+import { itemStatusOptions } from '@app-shared/constants/item.const';
+import { TagModule } from 'primeng/tag';
 
 @Component({
   selector: 'app-lib-item-detail-modal',
@@ -50,6 +52,7 @@ import { NotificationService, StorageService } from '@app-shared/services';
     AsyncPipe,
     UploadMultipleImageComponent,
     JsonPipe,
+    TagModule,
   ],
   templateUrl: './lib-item-detail-modal.component.html',
   styles: ``,
@@ -84,6 +87,10 @@ export class LibItemDetailModalComponent
 
   get price(): UntypedFormControl {
     return this.form.get('price') as UntypedFormControl;
+  }
+
+  get imageUrls(): UntypedFormControl {
+    return this.form.get('imageUrls') as UntypedFormControl;
   }
 
   ngOnInit() {
@@ -134,6 +141,15 @@ export class LibItemDetailModalComponent
           });
       }
     } else if (this.currentFormType === FormType.Update) {
+      const uploadModels = this.uploadMultipleComponent.getBothFileAndSrc();
+      const files = uploadModels
+        ?.map((x) => (x instanceof File ? x : undefined))
+        .filter((x) => x !== undefined);
+
+      console.log('FILES', files);
+
+      if (files!.length === 0) {
+      }
     }
   }
 
@@ -145,13 +161,20 @@ export class LibItemDetailModalComponent
   onShowUpdateModal(item: IItemViewModel) {
     this.currentFormType = FormType.Update;
     this.visible = true;
-    this.form.patchValue({ ...item });
+    item.sizePrices?.forEach((_) => this.addSizePriceControl());
+    this.form.patchValue({
+      ...item,
+      imageUrls: item.images?.map((x) => x.url),
+    });
   }
 
   onHideModal() {
     this.visible = false;
     this.form.reset();
+    this.sizePrices.clear();
+    this.uploadMultipleComponent.reset();
     this.currentFormType = FormType.Undefined;
+    this.uploadMultipleComponent.reset();
   }
 
   private loadUnits() {
@@ -167,6 +190,7 @@ export class LibItemDetailModalComponent
       sku: [null, [Validators.required]],
       imageUrls: [null],
       price: [null],
+      isActive: [null],
       sizePrices: this.formBuilder.array([]),
       unitId: [null, [Validators.required]],
       toppingIds: [null],
@@ -181,10 +205,7 @@ export class LibItemDetailModalComponent
 
   protected readonly FormType = FormType;
 
-  addSizePrice() {
-    this.form.patchValue({
-      price: null,
-    });
+  addSizePriceControl() {
     if (this.sizePrices.length === 5) return;
     this.sizePrices.push(
       this.formBuilder.group({
@@ -201,4 +222,6 @@ export class LibItemDetailModalComponent
   removeAllSizePrice() {
     this.sizePrices.clear();
   }
+
+  protected readonly itemStatusOptions = itemStatusOptions;
 }

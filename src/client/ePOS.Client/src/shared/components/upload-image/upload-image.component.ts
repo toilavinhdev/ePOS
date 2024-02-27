@@ -10,7 +10,7 @@ import { defaultImagePath } from '@app-shared/constants';
 })
 export class UploadImageComponent {
   @Input() styleClass!: string;
-  @Input() src!: string;
+  @Input() src: string | undefined;
   @Output() fileChange = new EventEmitter<File>();
   blobSrc!: string;
   file!: File;
@@ -25,5 +25,10 @@ export class UploadImageComponent {
       new Blob([this.file], { type: this.file.type }),
     );
     this.fileChange.emit(this.file);
+  }
+
+  reset() {
+    this.file = undefined!;
+    this.blobSrc = undefined!;
   }
 }

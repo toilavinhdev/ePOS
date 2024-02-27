@@ -36,9 +36,7 @@ export class UserAvatarComponent extends BaseComponent implements OnInit {
     this.profile$ = this.store.select(userProfileSelector);
   }
 
-  ngOnInit() {
-    this.store.dispatch(getMe());
-  }
+  ngOnInit() {}
 
   onSignOut() {
     this.store.dispatch(signOut());

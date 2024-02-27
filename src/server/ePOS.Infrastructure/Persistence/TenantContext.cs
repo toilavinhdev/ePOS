@@ -3,6 +3,7 @@ using ePOS.Application.Common.Contracts;
 using ePOS.Domain.CategoryAggregate;
 using ePOS.Domain.FileAggregate;
 using ePOS.Domain.ItemAggregate;
+using ePOS.Domain.OrderAggregate;
 using ePOS.Domain.TenantAggregate;
 using ePOS.Domain.UnitAggregate;
 using ePOS.Infrastructure.Identity.Aggregate;
@@ -29,6 +30,8 @@ public class TenantContext : IdentityDbContext<ApplicationUser, ApplicationRole,
     public DbSet<ItemImage> ItemImages { get; set; } = default!;
     public DbSet<ItemSize> ItemSizes { get; set; } = default!;
     public DbSet<ItemTax> ItemTaxes { get; set; } = default!;
+    public DbSet<Order> Orders { get; set; } = default!;
+    public DbSet<OrderItem> OrderItems { get; set; } = default!;
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -41,11 +44,13 @@ public class TenantContext : IdentityDbContext<ApplicationUser, ApplicationRole,
         ModelCreating<TenantTax>(builder);
         ModelCreating<Unit>(builder);
         ModelCreating<Category>(builder);
-        ModelCreating<CategoryItem>(builder);
+        builder.Entity<CategoryItem>().HasKey(x => new { x.CategoryId, x.ItemId });
         ModelCreating<Item>(builder, entityBuilder => entityBuilder.HasIndex(x => x.Sku));
         ModelCreating<ItemImage>(builder);
         ModelCreating<ItemSize>(builder);
         ModelCreating<ItemTax>(builder);
+        ModelCreating<Order>(builder);
+        ModelCreating<OrderItem>(builder);
     }
     
     private static void ModelCreating<T>(ModelBuilder builder) where T : class, IEntity
